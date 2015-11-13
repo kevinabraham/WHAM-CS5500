@@ -55,7 +55,7 @@
 
 		<div class="checkbox">
 		    <label>
-		      <input id="movies" type="checkbox"> Movies
+		      <input id="movies_film" type="checkbox"> Movies
 		    </label>
 		</div>
 
@@ -67,23 +67,65 @@
 	      </button>
 	    </div>  
 
+	    <div class="displayEvents"></div>
+
     </div>
-   
+   	<script type="text/javascript" src="http://api.eventful.com/js/api"></script>
     <script>
 
     $(document).ready(function (){
 
+    	var eventsList;
+		var display = $(".displayEvents");
+		display.empty();
       // $('#festivals, music, movies').on('click', function () {
       //   $(this).button('toggle'); // button text will be "finished!"
       //   $(this).checked = true;
       // });
 
       $("#searchButton").on("click", function(){
+      	// CLEARING LIST USED FOR INDICATING SELECTED CHECKBOXES
+      	eventsList = "";
+      	display.empty();
+
+
         var festivalCheckbox = $("#festivals");
         if(festivalCheckbox.is(":checked")){
-          alert("festivals");
+          // alert("festivals");
+          eventsList = eventsList + "festivals_parades";
+          // alert(eventsList);
         }
+
+         var oArgs = {
+	      app_key: "vHx53bbX7CwW3hrs",
+	      // q: "music",
+	      where: "Boston", 
+	      category: eventsList,
+	      // "date": "2013061000-2015062000",
+	      page_size: 5,
+	      sort_order: "popularity",
+   	  };
+
+	   EVDB.API.call("/events/search", oArgs, function(oData) {
+
+	      // Note: this relies on the custom toString() methods below
+	        console.log(oData);
+
+	        for (var i = 0; i < oData.events.event.length; i++) {
+	        	
+	        	display.append("<li><div><label>"+oData.events.event[i].title
+	        		+"</label></div></li>");
+
+	        	// console.log("Title : " + oData.events.event[i].title )
+	        };
+
+	   });
+
+
       });
+
+     
+
 
     });
 
