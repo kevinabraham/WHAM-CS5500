@@ -43,7 +43,7 @@
 
 		<div class="checkbox">
 		    <label>
-		      <input id="festivals" type="checkbox"> Festivals
+		      <input id="festivals_parades" type="checkbox"> Festivals
 		    </label>
 		</div>
 
@@ -67,11 +67,20 @@
 	      </button>
 	    </div>  
 
+		<!-- DIV USED TO DISPLAY THE EVENTS -->
 	    <div class="displayEvents"></div>
 
     </div>
    	<script type="text/javascript" src="http://api.eventful.com/js/api"></script>
     <script>
+
+    function updateEventsList(categoryList, id){
+      		if(categoryList == ""){
+      			categoryList = categoryList + id;
+      		}else{
+      			categoryList = categoryList +", "+ id;
+      		}
+      	}
 
     $(document).ready(function (){
 
@@ -83,46 +92,71 @@
       //   $(this).checked = true;
       // });
 
-      $("#searchButton").on("click", function(){
-      	// CLEARING LIST USED FOR INDICATING SELECTED CHECKBOXES
-      	eventsList = "";
-      	display.empty();
+		
+
+	      $("#searchButton").on("click", function(){
+	      	// CLEARING LIST USED FOR INDICATING SELECTED CHECKBOXES
+	      	eventsList = "";
+	      	display.empty();
+
+	      	
+
+	        var festivalCheckbox = $("#festivals_parades");
+	        if(festivalCheckbox.is(":checked")){
+		        if(eventsList == ""){
+	      			eventsList = eventsList + festivalCheckbox.attr("id");
+	      		}else{
+	      			eventsList = eventsList +", "+ festivalCheckbox.attr("id");
+	      		}
+	        }
+
+	        var musicCheckbox = $("#music");
+	        if(musicCheckbox.is(":checked")){
+	          if(eventsList == ""){
+	      			eventsList = eventsList + musicCheckbox.attr("id");
+	      		}else{
+	      			eventsList = eventsList +", "+ musicCheckbox.attr("id");
+	      		}
+	        }
+
+	        var moviesCheckbox = $("#movies_film");
+	        if(moviesCheckbox.is(":checked")){
+	          if(eventsList == ""){
+	      			eventsList = eventsList + moviesCheckbox.attr("id");
+	      		}else{
+	      			eventsList = eventsList +", "+ moviesCheckbox.attr("id");
+	      		}
+	        }
+
+	        alert(eventsList);
+
+	         var oArgs = {
+		      app_key: "vHx53bbX7CwW3hrs",
+		      // q: "music",
+		      where: ("32.746682, -117.162741"), 
+		      category: eventsList,
+		      // "date": "2013061000-2015062000",
+		      page_size: 5,
+		      sort_order: "popularity",
+	   	  	 };
+
+			   EVDB.API.call("/events/search", oArgs, function(oData) {
+
+			      // Note: this relies on the custom toString() methods below
+			        console.log(oData);
+
+			        for (var i = 0; i < oData.events.event.length; i++) {
+			        	
+			        	display.append("<li><div><label>"+oData.events.event[i].title
+			        		+"</label></div></li>");
+
+			        	// console.log("Title : " + oData.events.event[i].title )
+			        };
+
+			   });
 
 
-        var festivalCheckbox = $("#festivals");
-        if(festivalCheckbox.is(":checked")){
-          // alert("festivals");
-          eventsList = eventsList + "festivals_parades";
-          // alert(eventsList);
-        }
-
-         var oArgs = {
-	      app_key: "vHx53bbX7CwW3hrs",
-	      // q: "music",
-	      where: "Boston", 
-	      category: eventsList,
-	      // "date": "2013061000-2015062000",
-	      page_size: 5,
-	      sort_order: "popularity",
-   	  };
-
-	   EVDB.API.call("/events/search", oArgs, function(oData) {
-
-	      // Note: this relies on the custom toString() methods below
-	        console.log(oData);
-
-	        for (var i = 0; i < oData.events.event.length; i++) {
-	        	
-	        	display.append("<li><div><label>"+oData.events.event[i].title
-	        		+"</label></div></li>");
-
-	        	// console.log("Title : " + oData.events.event[i].title )
-	        };
-
-	   });
-
-
-      });
+	      });
 
      
 
