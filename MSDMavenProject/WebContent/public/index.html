@@ -7,6 +7,9 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
 
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA82fzI4JCrPhto0qKZ2QrTLYshvgaJk7U"
+        async defer></script> -->
+
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Bootstrap 101 Template</title>
 
@@ -19,14 +22,28 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
 
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=onGoogleReady"></script>
+
      	<script type="text/javascript" src="http://api.eventful.com/js/api"></script>
+
+     	<style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
 </head>
 
 <body ng-app="PlacesApp">
 
+
 <div ng-controller="myNoteCtrl">
 
-{{message}}
+{{error}}
 
 <div class="container">
 		<div class="checkbox">
@@ -63,10 +80,12 @@
 
     </div>
 
+    <div id="map"></div>
+
 
 </div>
       
- 
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQbY5fxCxyKIDVA4l-pF3BfrycBoqVf9g&signed_in=true&libraries=places" async defer></script>
 
 </body>
 </html>
