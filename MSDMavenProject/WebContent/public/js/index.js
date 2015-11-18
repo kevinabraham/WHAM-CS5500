@@ -11,69 +11,65 @@ app.controller("myNoteCtrl", function($scope) {
     $scope.lng = "0";
     $scope.accuracy = "0";
     $scope.error = "";
-    $scope.model = { myMap: undefined };
+    $scope.myMap = new google.maps.Map(document.getElementById('map'), { zoom: 15 });
     $scope.myMarkers = [];
+    $scope.currentLocation = null;
 
-    // $scope.initMap = function(){}
+    $scope.mapOptions = {
+            center: new google.maps.LatLng($scope.lat, $scope.lng),
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
 
-    // $scope.mapOptions = {
-    //         center: new google.maps.LatLng($scope.lat, $scope.lng),
-    //         zoom: 15,
-    //         mapTypeId: google.maps.MapTypeId.ROADMAP
-    //     };
-
-    var infowindow;
+    var infowindow = new google.maps.InfoWindow();
     
     $scope.showPosition = function (position) {
             console.log("Inside show position");
             console.log(position);
             $scope.lat = position.coords.latitude;
             $scope.lng = position.coords.longitude;
-            $scope.accuracy = position.coords.accuracy;
-            $scope.$apply();
 
-            var pyrmont = {lat: position.coords.latitude, lng: position.coords.longitude};
+            var latlng = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+            $scope.myMap.setCenter(latlng);
+            $scope.currentLocation = latlng;
 
-            map = new google.maps.Map(document.getElementById('map'), {
-                  center: pyrmont,
-                  zoom: 15
-            });
+            //create a marker for my location
 
-  infowindow = new google.maps.InfoWindow();
+            $scope.getevents();
+        }
 
-  var service = new google.maps.places.PlacesService(map);
+        function getGooglePlacesEvents(location){
+
+          var service = new google.maps.places.PlacesService($scope.myMap);
   service.nearbySearch({
-    location: pyrmont,
+    location: $scope.currentLocation,
     radius: 500,
     types: ['store']
   }, callback);
-            // var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
-            // $scope.model.myMap.setCenter(latlng);
-            // $scope.myMarkers.push(new google.maps.Marker({ map: latlng, position: latlng }));
+
         }
 
         function callback(results, status) {
+            console.log("Google places results");
             console.log(results);
   if (status === google.maps.places.PlacesServiceStatus.OK) {
     for (var i = 0; i < results.length; i++) {
-      createMarker(results[i].geometry.location);
+        var eventInfo = {title : results[i].name , location : results[i].geometry.location}
+      createMarker(eventInfo);
     }
   }
 }
-function displayEvents(){
-console.log("Inside displayEvents");
-}
 
-function createMarker(place) {
-    console.log(place);
-  var placeLoc = place;
+function createMarker(eventInfo) {
+    // console.log(place);
+  console.log(eventInfo);
   var marker = new google.maps.Marker({
-    map: map,
-    position: place
+    map: $scope.myMap,
+    position: eventInfo.location
   });
 
   google.maps.event.addListener(marker, 'click', function() {
-    // infowindow.setContent(place.name);
+    infowindow.setContent(eventInfo.title);
     infowindow.open(map, this);
   });
 }
@@ -130,36 +126,42 @@ function createMarker(place) {
     		eventsList = eventsList + "festivals_parades";
     	}
 
+      getEventsEventFull(eventsList);    
+      // getGooglePlacesEvents();	
+    }
 
-        if($scope.lat !== 0 || $scope.lng !==0){
-            var oArgs = {
+
+
+    function  getEventsEventFull(eventsList){
+      console.log("Inside getEventsEventFull");
+      console.log("Location");
+      console.log($scope.lat,$scope.lng);
+
+      var StringLocation = $scope.lat +"," + $scope.lng;
+      console.log("String location"+StringLocation);
+      var oArgs = {
           app_key: "vHx53bbX7CwW3hrs",
           // q: "music",
-          where: "Boston", 
+          location: (StringLocation), 
+          within : 10,
+          units:"mi",
           category: eventsList,
           // "date": "2013061000-2015062000",
-          page_size: 5,
+          page_size: 10,
           sort_order: "popularity",
       };
-      // (String($scope.lat),String($scope.lng))
 
       EVDB.API.call("/events/search", oArgs, function(oData) {
+            console.log("Eventfull data");
             console.log(oData);
             $scope.events = oData.events.event;
             for(var i=0;i<$scope.events.length;i++){
-                var locate = {lat : Number($scope.events[i].latitude), lng: Number($scope.events[i].longitude)};
-                console.log("Location");
-                console.log(locate);
-                createMarker(locate);
+              console.log(i);
+              var eventlatlng = {lat : Number($scope.events[i].latitude), lng: Number($scope.events[i].longitude)};
+              var eventInfo = {title : $scope.events[i].title, location: eventlatlng};
+                createMarker(eventInfo);
             }
 
-
-
        });
-  }else{
-    $scope.error = "Error with the location";
-  }
-
-    	
     }
 });
