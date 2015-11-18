@@ -15,6 +15,32 @@ app.controller("myNoteCtrl", function($scope) {
     $scope.myMarkers = [];
     $scope.currentLocation = null;
 
+//autcomplete code 
+    var input = document.getElementById('pac-input');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+  autocomplete.bindTo('bounds', $scope.myMap);
+
+  autocomplete.addListener('place_changed', function() {
+    console.log("Inside autocomplete place changed");
+    var place = autocomplete.getPlace();
+    console.log(place);
+    if (!place.geometry) {
+      console.log("Autocomplete's returned place contains no geometry");
+      return;
+    }
+    console.log($scope.lat);
+    console.log($scope.lng);
+
+    $scope.lat = place.geometry.location.lat();
+    $scope.lng = place.geometry.location.lng();
+
+    var latlng = new google.maps.LatLng($scope.lat,$scope.lng);
+    $scope.myMap.setCenter(place.geometry.location);
+     $scope.myMap.setZoom(17);
+  });
+
+
+
     $scope.mapOptions = {
             center: new google.maps.LatLng($scope.lat, $scope.lng),
             zoom: 15,
