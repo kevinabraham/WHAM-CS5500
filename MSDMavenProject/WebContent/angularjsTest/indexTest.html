@@ -1,0 +1,388 @@
+<html>
+<head>
+  <!-- Jasmine References -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.3.3/jasmine.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.3.3/jasmine.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.3.3/jasmine-html.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.3.3/boot.min.js"></script>
+
+  <!-- Angular and Angular Mock references -->
+  <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
+  <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-mocks.js"></script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQbY5fxCxyKIDVA4l-pF3BfrycBoqVf9g&libraries=places" async defer></script>
+
+   <!-- // <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script> -->
+   <!-- // <script type="text/javascript" src="../public/js/index.js"></script> -->
+
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA82fzI4JCrPhto0qKZ2QrTLYshvgaJk7U"
+    async defer></script> -->
+
+    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="http://api.eventful.com/js/api"></script>
+</head>
+<body></body>
+<!-- <body ng-app="PlacesApp">
+
+
+  <div ng-controller="myNoteCtrl">
+
+    {{error}}
+
+    <div class="container">
+
+      <div>
+        <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input id="festivals" type="checkbox" ng-model="option.festival"> Festivals
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input id="music" type="checkbox" ng-model="option.music"> Music
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input id="movies_film" type="checkbox" ng-model="option.movies"> Movies
+        </label>
+      </div>
+
+      <br></br>
+
+      <div>
+        <button type="button" id="searchButton" class="btn btn-primary" ng-click="getevents()" autocomplete="off">
+          SEARCH
+        </button>
+      </div>  
+
+      
+
+      <div>
+        <div ng-repeat="e in events">
+          {{e.title}}
+        </div>
+      </div>
+
+      <div id="map"></div>
+
+    </div>
+
+    
+
+
+  </div>
+  
+
+
+</body> -->
+<script type="text/javascript">
+  // angular.module('calculatorApp', []).controller('CalculatorController', function CalculatorController($scope) {
+  //   $scope.sum = function() {
+  //     $scope.z = $scope.x + $scope.y;
+  //   };
+  // });
+
+  // /* Test Code */
+  // describe('calculator', function () {
+
+  //   beforeEach(module('calculatorApp'));
+  //   var $controller;
+  //   beforeEach(inject(function(_$controller_){
+  //     $controller = _$controller_;
+  //   }));
+  //   describe('sum', function () {
+  //     it('1 + 1 should equal 2', function () {
+  //       var $scope = {};
+  //       var controller = $controller('CalculatorController', { $scope: $scope });
+  //       $scope.x = 1;
+  //       $scope.y = 2;
+  //       $scope.sum();
+  //       expect($scope.z).toBe(3);
+  //     }); 
+  //   });
+  // });
+
+var app = angular.module("PlacesApp", []);
+
+app.controller("myNoteCtrl", function($scope) {
+  $scope.message = "Hello to the project";
+  $scope.option = {};
+  $scope.events = null;
+
+  $scope.position = "";
+
+  $scope.lat = "0";
+  $scope.lng = "0";
+  $scope.accuracy = "0";
+  $scope.error = "";
+  // $scope.myMap = new google.maps.Map(document.getElementById('map'), { zoom: 15 });
+  $scope.myMarkers = [];
+  $scope.currentLocation = null;
+
+//autcomplete code 
+// var input = document.getElementById('pac-input');
+// var autocomplete = new google.maps.places.Autocomplete(input);
+// autocomplete.bindTo('bounds', $scope.myMap);
+
+// autocomplete.addListener('place_changed', function() {
+//   console.log("Inside autocomplete place changed");
+//   var place = autocomplete.getPlace();
+//   console.log(place);
+//   if (!place.geometry) {
+//     console.log("Autocomplete's returned place contains no geometry");
+//     return;
+//   }
+//   console.log($scope.lat);
+//   console.log($scope.lng);
+
+//   $scope.lat = place.geometry.location.lat();
+//   $scope.lng = place.geometry.location.lng();
+
+//   var latlng = new google.maps.LatLng($scope.lat,$scope.lng);
+//   $scope.myMap.setCenter(place.geometry.location);
+//   $scope.myMap.setZoom(17);
+// });
+
+
+
+$scope.mapOptions = {
+  center: new google.maps.LatLng($scope.lat, $scope.lng),
+  zoom: 15,
+  mapTypeId: google.maps.MapTypeId.ROADMAP
+};
+
+var infowindow = new google.maps.InfoWindow();
+
+// $scope.showPosition = function (position) {
+//   console.log("Inside show position");
+//   console.log(position);
+//   $scope.lat = position.coords.latitude;
+//   $scope.lng = position.coords.longitude;
+
+//   var latlng = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+//   $scope.myMap.setCenter(latlng);
+//   $scope.currentLocation = latlng;
+
+//   //create a marker for my location
+
+//   $scope.getevents();
+// }
+
+// function getGooglePlacesEvents(location){
+
+//   var service = new google.maps.places.PlacesService($scope.myMap);
+//   service.nearbySearch({
+//     location: $scope.currentLocation,
+//     radius: 500,
+//     types: ['store']
+//   }, callback);
+// }
+
+function callback(results, status) {
+  console.log("Google places results");
+  console.log(results);
+  if (status === google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      var eventInfo = {title : results[i].name , location : results[i].geometry.location}
+      createMarker(eventInfo);
+    }
+  }
+}
+
+// function createMarker(eventInfo) {
+//     // console.log(place);
+//     console.log(eventInfo);
+//     var marker = new google.maps.Marker({
+//       map: $scope.myMap,
+//       position: eventInfo.location
+//     });
+
+//     google.maps.event.addListener(marker, 'click', function() {
+//       infowindow.setContent(eventInfo.title);
+//       infowindow.open(map, this);
+//     });
+//   }
+
+
+  $scope.showError = function (error) {
+    console.log("Error")
+    console.log(error);
+    switch (error.code) {
+      case error.PERMISSION_DENIED:
+      $scope.error = "User denied the request for Geolocation."
+      break;
+      case error.POSITION_UNAVAILABLE:
+      $scope.error = "Location information is unavailable."
+      break;
+      case error.TIMEOUT:
+      $scope.error = "The request to get user location timed out."
+      break;
+      case error.UNKNOWN_ERROR:
+      $scope.error = "An unknown error occurred."
+      break;
+    }
+    $scope.$apply();
+  }
+
+  // $scope.getLocation = function () {
+  //   console.log("Inside get location");
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition($scope.showPosition, $scope.showError);
+  //   }
+  //   else {
+  //     $scope.error = "Geolocation is not supported by this browser.";
+  //   }
+  // }
+
+  // $scope.getLocation();
+
+
+  
+  $scope.getevents = function(){
+   console.log("Inside find events");
+   console.log($scope.option);
+   $scope.eventsList = "";
+
+   if($scope.option.festival){
+    console.log("Get festivals");
+    if($scope.eventsList == ""){
+      $scope.eventsList = $scope.eventsList + "festivals_parades";
+    }else{
+      $scope.eventsList = $scope.eventsList +", "+ "festivals_parades";
+    }
+  }
+  if($scope.option.music){
+    if($scope.eventsList == ""){
+      $scope.eventsList = $scope.eventsList + "music";
+    }else{
+      $scope.eventsList = $scope.eventsList +", "+ "music";
+    }
+  }
+  if($scope.option.movies){
+    console.log("Get movies");
+    if($scope.eventsList == ""){
+      $scope.eventsList = $scope.eventsList + "movies_film";
+    }else{
+      $scope.eventsList = $scope.eventsList +", "+ "movies_film";
+    }
+  }
+
+  console.log($scope.eventsList);
+
+  getEventsEventFull($scope.eventsList);    
+        // getGooglePlacesEvents(); 
+      }
+
+
+
+      function  getEventsEventFull(eventsList){
+        console.log("Inside getEventsEventFull");
+        console.log("Location");
+        console.log($scope.lat,$scope.lng);
+
+        var StringLocation = $scope.lat +"," + $scope.lng;
+        console.log("String location"+StringLocation);
+        var oArgs = {
+          app_key: "vHx53bbX7CwW3hrs",
+        // q: "music",
+        location: (StringLocation), 
+        within : 10,
+        units:"mi",
+        category: eventsList,
+        // "date": "2013061000-2015062000",
+        page_size: 10,
+        sort_order: "popularity",
+      };
+
+      EVDB.API.call("/events/search", oArgs, function(oData) {
+        console.log("Eventfull data");
+        console.log(oData);
+        $scope.events = oData.events.event;
+        for(var i=0;i<$scope.events.length;i++){
+          console.log(i);
+          var eventlatlng = {lat : Number($scope.events[i].latitude), lng: Number($scope.events[i].longitude)};
+          var eventInfo = {title : $scope.events[i].title, location: eventlatlng};
+          createMarker(eventInfo);
+        }
+
+      });
+    }
+
+  });
+
+describe("Places", function(){
+  
+  beforeEach(angular.mock.module('PlacesApp'));
+
+  var $controller;
+
+  beforeEach(angular.mock.inject(function(_$controller_) {
+    $controller = _$controller_;
+  }));
+
+  
+  describe("Events List",function(){
+    it("Events list should only contain festival id when Festival is checked", function(){
+      var $scope = {};
+      var controller = $controller('myNoteCtrl', { $scope: $scope });   
+
+      $scope.option.festival = true;
+      $scope.getevents();
+      expect($scope.eventsList).toBe("festivals_parades");
+    });
+
+    it("Events list should only contain music id when Music is checked", function(){
+      var $scope = {};
+      var controller = $controller('myNoteCtrl', { $scope: $scope });   
+
+      $scope.option.music = true;
+      $scope.getevents();
+      expect($scope.eventsList).toBe("music");
+    });
+
+    it("Events list should only contain movies id when Movies is checked", function(){
+      var $scope = {};
+      var controller = $controller('myNoteCtrl', { $scope: $scope });   
+
+      $scope.option.movies = true;
+      $scope.getevents();
+      expect($scope.eventsList).toBe("movies_film");
+    });
+
+    it("Events list should contain only Festival and Movie ids when Festival and Movies are checked", function(){
+      var $scope = {};
+      var controller = $controller('myNoteCtrl', { $scope: $scope });   
+
+      $scope.option.festival = true;
+      $scope.option.movies = true;
+      $scope.getevents();
+      expect($scope.eventsList).toBe("festivals_parades, movies_film");
+    });
+
+    it("Events list should contain all ids when Festival, Music and Movies are checked", function(){
+      var $scope = {};
+      var controller = $controller('myNoteCtrl', { $scope: $scope });   
+
+      $scope.option.festival = true;
+      $scope.option.music = true;
+      $scope.option.movies = true;
+      $scope.getevents();
+      expect($scope.eventsList).toBe("festivals_parades, music, movies_film");
+    });
+  });
+
+});
+</script>
+</html>
