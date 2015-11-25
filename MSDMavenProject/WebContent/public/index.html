@@ -13,7 +13,7 @@
     async defer></script> -->
 
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>WHAM</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
@@ -45,6 +45,9 @@
     		min-height: 50px;
     		margin-bottom: 0px;
     		border: 1px solid transparent;
+    	}
+    	.tpad20 {
+    		padding-top: 20px;
     	}
     </style>
 </head>
@@ -139,61 +142,43 @@
 				</button>
 			</div>  
 
-			
+		</div>
 
-			<div>
-				<div ng-repeat="e in events">
-					<!-- <img src="{{e.image.medium.url}}">
-					<label>Title : </label>{{e.title}}
-					<label>Venue : </label>
-					<a href="{{e.venue_url}}">{{e.venue_name}}</a>
-					<label>Time :</label>{{e.start_time}}
-					<a href="{{e.url}}">Event Details</a> -->
-					<!-- <label>Event Details :</label>{{e.url}} -->
-					<div class="container">
-						<div class="row">
+		<div class="container tpad20">
 
-						<h3>{{e.title}}</h3>
+			<div ng-repeat="e in events">
 
-							<div class="col-md-2">
-								<img src="{{e.image.medium.url}}">
-							</div>
-							<div class="col-md-10">
-								<p><label>Venue : </label>
-									<a href="{{e.venue_url}}">{{e.venue_name}}</a></p>
-									<p><label>Time : </label>{{e.start_time}}</p>
-									<p><a href="{{e.url}}">Event Details</a></p>
-									<!-- <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> -->
-								</div>
-							</div>
+				<div class="panel panel-info">
 
+					<div class="panel-heading">
+						<h3 class="panel-title">{{e.title}}</h3>
+					</div>
+
+					<div class="panel-body">
+						<div class="col-md-2">
+							<img src="{{e.image.medium.url}}">
+						</div>
+
+						<div class="col-md-10">
+							<p>
+								<label>Venue : </label>
+								<a href="{{e.venue_url}}">{{e.venue_name}}</a>
+							</p>
+							<p>
+								<label>Time : </label>{{e.start_time}}
+							</p>
+							<p>
+								<a href="{{e.url}}">Event Details</a>
+							</p>
 						</div>
 					</div>
 
-				<!-- <div class="row">
-					<div class="col-md-6">
-						<h2>Heading</h2>
-						<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-						<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-					</div>
-					<div class="col-md-6">
-						<h2>Heading</h2>
-						<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-						<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-					</div>
-
-				</div> -->
+				</div>
 			</div>
-
-			
-
 		</div>
-
-		
-
-
 	</div>
-	
+
+
 
 
 </body>
