@@ -38,7 +38,13 @@
     	}
     	#map {
     		height: 60%;
-    		border: 1px solid;
+    		/*border: 1px solid;*/
+    	}
+    	.navbar {
+    		position: relative;
+    		min-height: 50px;
+    		margin-bottom: 0px;
+    		border: 1px solid transparent;
     	}
     </style>
 </head>
@@ -50,34 +56,85 @@
 
 		{{error}}
 
+
+		<nav class="navbar navbar-inverse navbar-static-top">
+			<div class="container">
+				
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">
+						WHAM
+						<!-- <img alt="Brand" src="..."> -->
+					</a>
+				</div>
+
+				<!-- <div class="nav navbar-right">
+					
+					
+
+					<button type="submit" class="btn btn-primary navbar-btn">Sign In</button>
+					<button type="submit" class="btn btn-primary navbar-btn">Sign Up</button>
+
+				</div> -->
+
+				<div id="navbar" class="navbar-collapse collapse">
+					<form class="navbar-form navbar-right">
+						
+						<div class="form-group">
+							<input id="pac-input" class="controls form-control" type="text" placeholder="Enter a location">
+						</div>
+
+						<button type="submit" class="btn btn-primary">Sign In</button>
+						<button type="submit" class="btn btn-primary">Sign Up</button>
+
+					</form>
+				</div>
+
+			</div>
+		</nav>
+
+		<div id="map"></div>
+
+
 		<div class="container">
 
-			<div>
+			
+			<!-- <div>
 				<input id="pac-input" class="controls" type="text" placeholder="Enter a location">
-			</div>
+			</div> -->
 
-			<div class="checkbox">
-				<label>
-					<input id="festivals" type="checkbox" ng-model="option.festival"> Festivals
-				</label>
-			</div>
+			
 
-			<div class="checkbox">
-				<label>
-					<input id="music" type="checkbox" ng-model="option.music"> Music
-				</label>
-			</div>
+			<div class="checkbox row">
 
-			<div class="checkbox">
-				<label>
-					<input id="movies_film" type="checkbox" ng-model="option.movies"> Movies
-				</label>
-			</div>
+				<div class="col-md-2">
+					<label>
+						<input id="festivals" type="checkbox" ng-model="option.festival"> Festivals
+					</label>
+				</div>
+			<!-- </div>
 
-			<br></br>
+
+			<div class="checkbox"> -->
+
+				<div class="col-md-2">
+					<label>
+						<input id="music" type="checkbox" ng-model="option.music"> Music
+					</label>
+				</div>
+			<!-- </div>
+
+			<div class="checkbox"> -->
+
+				<div class="col-md-2">
+					<label>
+						<input id="movies_film" type="checkbox" ng-model="option.movies"> Movies
+					</label>
+				</div>
+			</div>
+			
 
 			<div>
-				<button type="button" id="searchButton" class="btn btn-primary" ng-click="getevents()" autocomplete="off">
+				<button type="button" id="searchButton" class="btn btn-primary btn-lg btn-block" ng-click="getevents()" autocomplete="off">
 					SEARCH
 				</button>
 			</div>  
@@ -86,11 +143,49 @@
 
 			<div>
 				<div ng-repeat="e in events">
-					{{e.title}}
-				</div>
+					<!-- <img src="{{e.image.medium.url}}">
+					<label>Title : </label>{{e.title}}
+					<label>Venue : </label>
+					<a href="{{e.venue_url}}">{{e.venue_name}}</a>
+					<label>Time :</label>{{e.start_time}}
+					<a href="{{e.url}}">Event Details</a> -->
+					<!-- <label>Event Details :</label>{{e.url}} -->
+					<div class="container">
+						<div class="row">
+
+						<h3>{{e.title}}</h3>
+
+							<div class="col-md-2">
+								<img src="{{e.image.medium.url}}">
+							</div>
+							<div class="col-md-10">
+								<p><label>Venue : </label>
+									<a href="{{e.venue_url}}">{{e.venue_name}}</a></p>
+									<p><label>Time : </label>{{e.start_time}}</p>
+									<p><a href="{{e.url}}">Event Details</a></p>
+									<!-- <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> -->
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				<!-- <div class="row">
+					<div class="col-md-6">
+						<h2>Heading</h2>
+						<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+						<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+					</div>
+					<div class="col-md-6">
+						<h2>Heading</h2>
+						<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+						<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+					</div>
+
+				</div> -->
 			</div>
 
-			<div id="map"></div>
+			
 
 		</div>
 
