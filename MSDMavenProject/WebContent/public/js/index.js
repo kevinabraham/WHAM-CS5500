@@ -32,6 +32,10 @@ $scope.showPosition = function (position) {
   $scope.currentLocation = latlng;
 
             //create a marker for my location
+            var marker = new google.maps.Marker({
+              map: $scope.myMap,
+              position: latlng
+          });
 
             $scope.getevents();
           }
@@ -57,18 +61,28 @@ $scope.showPosition = function (position) {
             }
           }
 
-          function createMarker(eventInfo) {
+  function createMarker(eventInfo) {
     // console.log(place);
     console.log(eventInfo);
-    var marker = new google.maps.Marker({
-      map: $scope.myMap,
-      position: eventInfo.location
-    });
+  var marker = new google.maps.Marker({
+    map: $scope.myMap,
+    position: eventInfo.location,
+    title : eventInfo.title
+  });
 
-    google.maps.event.addListener(marker, 'click', function() {
-      infowindow.setContent(eventInfo.title);
-      infowindow.open(map, this);
-    });
+
+   marker.content = '<div class="infoWindowContent">'
+   + '<b>Venue </b>: '+ eventInfo.venue_address +', '+ eventInfo.city_name+', '+ eventInfo.postal_code
+   +'<br/ ><b>Date</b> : '+eventInfo.start_time+'<br/><a href='+eventInfo.url+'>Event Details</a>'
+   +'</div>';
+
+  google.maps.event.addListener(marker, 'click', function() {
+    console.log("inside infowindow");
+    infowindow.setContent('<p>' + marker.title + '</p>' + marker.content);
+    infowindow.open($scope.myMap, marker);
+  });
+
+  $scope.myMarkers.push(marker);
   }
 
 
@@ -122,7 +136,7 @@ $scope.showPosition = function (position) {
           console.log("Inside autocomplete place changed");
           var place = autocomplete.getPlace();
           console.log(place);
-              
+
           if (!place.geometry) {
             console.log("Autocomplete's returned place contains no geometry");
             return;
@@ -160,6 +174,7 @@ $scope.showPosition = function (position) {
    console.log("Inside find events");
    console.log($scope.option);
    var eventsList = "";
+   $scope.myMarkers = [];
 
    if($scope.option.festival){
     console.log("Get festivals");
@@ -214,14 +229,18 @@ $scope.showPosition = function (position) {
 
         EVDB.API.call("/events/search", oArgs, function(oData) {
           console.log("Eventfull data");
-          console.log(oData);
-          $scope.events = oData.events.event;
-          for(var i=0;i<$scope.events.length;i++){
-            console.log(i);
-            var eventlatlng = {lat : Number($scope.events[i].latitude), lng: Number($scope.events[i].longitude)};
-            var eventInfo = {title : $scope.events[i].title, location: eventlatlng};
-            createMarker(eventInfo);
-          }
+            console.log(oData);
+            $scope.events = oData.events.event;
+            for(var i=0;i<$scope.events.length;i++){
+              var e = $scope.events[i];
+
+              console.log(i);
+              var eventlatlng = {lat : Number($scope.events[i].latitude), lng: Number($scope.events[i].longitude)};
+              var eventInfo = {title : e.title, location: eventlatlng, venue_address : e.venue_address, 
+                city_name : e.city_name, postal_code: e.postal_code, start_time: e.start_time, url:e.url};
+
+                createMarker(eventInfo);
+            }
 
         });
       }
