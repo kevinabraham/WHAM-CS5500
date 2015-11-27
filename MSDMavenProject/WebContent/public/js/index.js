@@ -1,6 +1,6 @@
 var app = angular.module("PlacesApp", []);
 
-app.controller("myNoteCtrl", function($scope) {
+app.controller("myNoteCtrl", function($scope,GoogleMapsService) {
   $scope.message = "Hello to the project";
   $scope.option = {};
   $scope.events = null;
@@ -11,43 +11,15 @@ app.controller("myNoteCtrl", function($scope) {
   $scope.lng = "0";
   $scope.accuracy = "0";
   $scope.error = "";
-  $scope.myMap = new google.maps.Map(document.getElementById('map'), { zoom: 15 });
+  $scope.myMap = null;
   $scope.myMarkers = [];
   $scope.currentLocation = null;
 
 //autcomplete code 
 var input = document.getElementById('pac-input');
-var autocomplete = new google.maps.places.Autocomplete(input);
-autocomplete.bindTo('bounds', $scope.myMap);
+var autocomplete;
 
-autocomplete.addListener('place_changed', function() {
-  console.log("Inside autocomplete place changed");
-  var place = autocomplete.getPlace();
-  console.log(place);
-  if (!place.geometry) {
-    console.log("Autocomplete's returned place contains no geometry");
-    return;
-  }
-  console.log($scope.lat);
-  console.log($scope.lng);
-
-  $scope.lat = place.geometry.location.lat();
-  $scope.lng = place.geometry.location.lng();
-
-  var latlng = new google.maps.LatLng($scope.lat,$scope.lng);
-  $scope.myMap.setCenter(place.geometry.location);
-  $scope.myMap.setZoom(17);
-});
-
-
-
-$scope.mapOptions = {
-  center: new google.maps.LatLng($scope.lat, $scope.lng),
-  zoom: 15,
-  mapTypeId: google.maps.MapTypeId.ROADMAP
-};
-
-var infowindow = new google.maps.InfoWindow();
+var infowindow;
 
 $scope.showPosition = function (position) {
   console.log("Inside show position");
@@ -130,7 +102,58 @@ $scope.showPosition = function (position) {
     }
   }
 
-  $scope.getLocation();
+  // Trying to run through service start
+
+    console.log("Trying initializing maps through the service");
+    var map;
+    GoogleMapsService.mapsInitialized.
+    then(function(){
+        console.log("Maps initialized");
+
+        $scope.myMap = new google.maps.Map(document.getElementById('map'), { zoom: 15 });
+        $scope.getLocation();
+
+        // initializing other variables 
+        autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.bindTo('bounds', $scope.myMap);
+
+        autocomplete.addListener('place_changed', function() {
+          console.log("Inside autocomplete place changed");
+          var place = autocomplete.getPlace();
+          console.log(place);
+              
+          if (!place.geometry) {
+            console.log("Autocomplete's returned place contains no geometry");
+            return;
+          }
+
+          console.log($scope.lat);
+          console.log($scope.lng);
+
+          $scope.lat = place.geometry.location.lat();
+          $scope.lng = place.geometry.location.lng();
+
+          var latlng = new google.maps.LatLng($scope.lat,$scope.lng);
+          $scope.currentLocation = latlng;
+
+          $scope.myMap.setCenter(latlng);
+          console.log("Changed map and geomarker center");
+          var marker = new google.maps.Marker({
+            map: $scope.myMap,
+            position: latlng
+          });
+
+          $scope.getevents();
+        });
+
+        infowindow = new google.maps.InfoWindow();
+
+        //initializing other variables
+
+      });
+
+    // Trying to run through service end
 
 
   $scope.getevents = function(){
@@ -165,7 +188,7 @@ $scope.showPosition = function (position) {
   console.log(eventsList);
 
   getEventsEventFull(eventsList);    
-      // getGooglePlacesEvents();	
+      // getGooglePlacesEvents();
     }
 
 
@@ -203,3 +226,35 @@ $scope.showPosition = function (position) {
         });
       }
     });
+
+
+app.factory('GoogleMapsService',function($window,$q){
+
+  //maps loader deferred object
+
+  var asyncUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBQbY5fxCxyKIDVA4l-pF3BfrycBoqVf9g&signed_in=true&libraries=places&callback=';
+  var mapsDefer = $q.defer();
+
+  
+
+  var asyncLoad = function(asyncUrl,callbackName){
+    var script = document.createElement('script');
+
+    script.src = asyncUrl + callbackName;
+    document.body.appendChild(script);
+
+  };
+
+  $window.googleMapsInitialized = function(){
+    mapsDefer.resolve();
+
+  };
+
+  asyncLoad(asyncUrl, 'googleMapsInitialized');
+
+  return {
+
+            // usage: Initializer.mapsInitialized.then(callback)
+            mapsInitialized : mapsDefer.promise
+  };
+})
