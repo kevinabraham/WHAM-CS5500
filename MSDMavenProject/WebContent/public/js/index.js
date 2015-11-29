@@ -32,12 +32,28 @@ $scope.showPosition = function (position) {
   $scope.currentLocation = latlng;
 
             //create a marker for my location
+            var iconBase = 'images/';
+
             var marker = new google.maps.Marker({
               map: $scope.myMap,
-              position: latlng
+              position: latlng,
+              icon: iconBase + 'blue-icon.png'
           });
+            map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('legend'));
 
+            /*var legend = document.getElementById('legend');
+          for (var style in styles) {
+              var name = style.name;
+              var icon = style.icon;
+              var div = document.createElement('div');
+              div.innerHTML = '<img src="' + icon + '"> ' + name;
+              legend.appendChild(div);
+          }*/
             $scope.getevents();
+          }
+
+          function getLocationOnClick() {
+            console.log("in fnction");
           }
 
           function getGooglePlacesEvents(location){
@@ -124,7 +140,7 @@ $scope.showPosition = function (position) {
     then(function(){
         console.log("Maps initialized");
 
-        $scope.myMap = new google.maps.Map(document.getElementById('map'), { zoom: 15 });
+        $scope.myMap = new google.maps.Map(document.getElementById('map'), { zoom: 12 });
         $scope.getLocation();
 
         // initializing other variables 

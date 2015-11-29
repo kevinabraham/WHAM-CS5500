@@ -7,6 +7,8 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
 
+	<link rel="shortcut icon" href="images/website-icon.ico">
+
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>WHAM</title>
 
@@ -78,7 +80,7 @@
 						<div class="form-group">
 							<input id="pac-input" class="controls form-control" type="text" placeholder="Enter a location">
 						</div>
-
+						<button type="submit" class="btn btn-primary" onclick="getLocationOnClick()">Find Me</button>
 						<button type="submit" class="btn btn-primary">Sign In</button>
 						<button type="submit" class="btn btn-primary">Sign Up</button>
 
@@ -88,8 +90,24 @@
 			</div>
 		</nav>
 
-		<div id="map"></div>
+		<script>
+			function getLocationOnClick() {
+				console.log("in fnction");
+			}
+		</script>
 
+		<div id="map">
+
+			<div id="legend"></div>
+		</div>
+		
+
+		<style>
+  		#legend {
+    		background: white;
+    		padding: 10px;
+  		}
+		</style>
 
 		<div class="container">
 
