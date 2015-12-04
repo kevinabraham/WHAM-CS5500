@@ -1,6 +1,6 @@
-var app = angular.module("PlacesApp", []);
+var app = angular.module("PlacesApp", ['ui.bootstrap']);
 
-app.controller("myNoteCtrl", function($scope,GoogleMapsService) {
+app.controller("myNoteCtrl", function($scope,GoogleMapsService,$uibModal) {
   $scope.message = "Hello to the project";
   $scope.option = {};
   $scope.events = null;
@@ -260,6 +260,58 @@ $scope.showPosition = function (position) {
 
         });
       }
+
+  //$scope.currentUser=null;
+    $scope.signin = function(){
+        console.log("Inside Sign in");
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'login.html',
+            // windowTemplateUrl: 'login.html',
+            controller: 'LoginController',
+            windowClass: 'windowClass',
+            //size: size,
+            //resolve: {
+            //    items: function () {
+            //        return $scope.items;
+            //    }
+            //}
+        });
+
+      modalInstance.result.then(function (currentUser) {
+        //alert(currentUser);
+        $scope.currentUser = currentUser;
+      }, function () {
+        //$log.info('Login failed at: ' + new Date());
+        console.log("Login failed");
+      });
+
+
+
+    }
+
+  $scope.signup = function(){
+    console.log("Inside signup");
+    var modalInstance = $uibModal.open({
+      animation: true,
+      templateUrl: 'signup.html',
+      controller: 'RegisterController'
+      //size: size,
+      //resolve: {
+      //    items: function () {
+      //        return $scope.items;
+      //    }
+      //}
+    });
+ modalInstance.result.then(function (currentUser) {
+        //alert(currentUser);
+        $scope.currentUser = currentUser;
+      }, function () {
+        //$log.info('Login failed at: ' + new Date());
+        console.log("Registration failed");
+      });
+
+  }
     });
 
 
@@ -293,3 +345,4 @@ app.factory('GoogleMapsService',function($window,$q){
             mapsInitialized : mapsDefer.promise
   };
 })
+
