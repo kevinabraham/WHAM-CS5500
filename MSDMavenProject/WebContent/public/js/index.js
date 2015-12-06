@@ -1,6 +1,8 @@
 var app = angular.module("PlacesApp", ['ui.bootstrap']);
 
-app.controller("myNoteCtrl", function($scope,GoogleMapsService,$uibModal) {
+app.controller("myNoteCtrl", function($scope,GoogleMapsService,$uibModal,$rootScope,UserService) {
+
+  UserService.loggedIn();
   $scope.message = "Hello to the project";
   $scope.option = {};
   $scope.events = null;
@@ -280,7 +282,7 @@ $scope.showPosition = function (position) {
 
       modalInstance.result.then(function (currentUser) {
         //alert(currentUser);
-        $scope.currentUser = currentUser;
+        $rootScope.currentUser = currentUser;
       }, function () {
         //$log.info('Login failed at: ' + new Date());
         console.log("Login failed");
@@ -305,14 +307,25 @@ $scope.showPosition = function (position) {
     });
  modalInstance.result.then(function (currentUser) {
         //alert(currentUser);
-        $scope.currentUser = currentUser;
+        $rootScope.currentUser = currentUser;
       }, function () {
         //$log.info('Login failed at: ' + new Date());
         console.log("Registration failed");
       });
 
   }
-    });
+
+  $scope.logout = function(){
+
+    UserService.logoutUser(function(response){
+      // $location.url("index.html");
+      console.log("User logout successfull");
+      $rootScope.currentUser = null;
+
+    })
+
+  }
+});
 
 
 app.factory('GoogleMapsService',function($window,$q){

@@ -7,6 +7,13 @@ var path = require("path");
 
 var mongoose=require('mongoose');
 
+var passport = require("passport");
+var LocalStrategy = require("passport-local").Strategy;
+var cookieParser = require("cookie-parser");
+var session = require("express-session");
+
+
+
 var connectionString = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost/User';
 
 var db = mongoose.connect(connectionString);
@@ -22,6 +29,34 @@ var User=mongoose.model("User",UserSchema);
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 // app.use(multer()); // for parsing multipart/form-data
+app.use(session({secret: "this is the secret"}));
+app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+passport.use(new LocalStrategy(function(username,password,done){
+    User.findOne({username :username, password:password},function(err,user){
+        if(err){
+            console.log("Error retrieving user for session");
+            return done(err);
+        }
+        if(!user){
+            console.log("No user found in session");
+            return done(null,false);}
+        return done(null,user);
+    });
+}));
+
+passport.serializeUser(function(user,done){
+done(null,user)
+});
+
+passport.deserializeUser(function(user,done){
+    User.findOne({username :user.username, password:user.password},function(err,user){
+        done(err,user)
+    });
+});
 
 app.get("/orgs", function (req, res) {
 
@@ -29,7 +64,7 @@ app.get("/orgs", function (req, res) {
     
     });
 
-app.post("/rest/login", function (req, res) {
+app.post("/rest/login",passport.authenticate("local"), function (req, res) {
 
     var user = req.body;
 
@@ -57,28 +92,31 @@ app.post("/rest/login", function (req, res) {
 
 });
 
-app.post("/rest/register",function(req,res)
-		{
-	       console.log("inside register");
-	         var user=req.body;
+app.post("/rest/register",function(req,res){
+    console.log("inside register");
+     var user=req.body;
 
-	         User.findOne({username:user.username},function(err,existingUser){
-	        	 if(existingUser==null)
-	        	 {
-	        		 User.create(user,function(err,doc)
-	    	        		 {
-	    	        	        res.json(user);
-	    	        		 })
-	        	 }
-	        	 else
-	        		 {
-	        		  res.json(null);
-	        		 }
+     User.findOne({username:user.username},function(err,existingUser){
+        if(existingUser==null)
+            {
+                User.create(user,function(err,doc){
+                    passport.authenticate('local')(req, res, function (){
+                        res.json(user);
+                    });
+                    });
+            }
+            else{ res.json(null);}
+        });
+ });
 
-	         })
+app.get("/rest/loggedin",function(req,res){
+    res.send(req.isAuthenticated() ? req.user : '0');
+});
 
-
-		})
+app.post("/rest/logout",function(req,res){
+    req.logout();
+    res.send(200);
+});
 
 
 var ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
