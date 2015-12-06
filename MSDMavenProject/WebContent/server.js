@@ -19,9 +19,12 @@ var connectionString = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localh
 var db = mongoose.connect(connectionString);
 
 var UserSchema=new mongoose.Schema({
+    firstname: String,
+    lastname: String,
     username:String,
     password:String,
-    email:String
+    email:String,
+    preferences : { types :[String]}
 })
 
 var User=mongoose.model("User",UserSchema);

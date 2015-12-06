@@ -6,13 +6,33 @@ app.controller("RegisterController",RegisterController);
 
     function RegisterController(UserService,$rootScope,$scope,$uibModalInstance) {
         $scope.message = null;
-        
+
+        $scope.pref = {};
+
+
+
         $scope.cancel = function(){
          $uibModalInstance.dismiss('cancel');
         }
 
-        $scope.register = function (user) {
+        $scope.register = function (user,pref) {
             console.log("Inside register user");
+            console.log(user);
+             console.log(pref);
+
+             //add user preferences 
+             var types = [];
+
+             for(key in pref){
+                if(pref[key])
+                    types.push(key);
+             }
+             console.log("types");
+             console.log(types);
+             user.preferences = {types : types};
+
+
+
             UserService.createUser(user, function (response) {
                 if (response != null) {
                     console.log("User created");

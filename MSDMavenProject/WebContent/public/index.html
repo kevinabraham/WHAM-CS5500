@@ -137,7 +137,7 @@ Welcome {{currentUser.username}}
 
 			
 
-			<div class="checkbox row">
+			<div class="checkbox row" ng-show = 	"currentUser == null">
 
 				<div class="col-md-2">
 					<label>
@@ -164,7 +164,7 @@ Welcome {{currentUser.username}}
 					</label>
 				</div>
 			</div>
-			
+			<br/>
 
 			<div>
 				<button type="button" id="searchButton" class="btn btn-primary btn-lg btn-block" ng-click="getevents()" autocomplete="off">

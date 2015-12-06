@@ -14,23 +14,27 @@
 <div class="logo"></div>
 <div class="login-block">
     <div>
-    <h1>Sign Up</h1>
+    <h1>Registration</h1>
 <div ng-hide="message==null">{{message}}</div>
-    <input type="text" value="" placeholder="Username" id="username" ng-model="user.username"/>
-    <input type="password" value="" placeholder="Password" id="password" ng-model="user.password"/>
+
+
+    <input ng-model="user.firstname" class="form-control" type="text" value="" placeholder="Firstname" id="username" />
+    <input ng-model="user.lastname" class="form-control" type="password" value="" placeholder="Lastname" id="username" />
+    <input ng-model="user.username" class="form-control" type="text" value="" placeholder="Username" id="username" />
+    <input ng-model="user.password" class="form-control" type="password" value="" placeholder="Password" id="password" />
     <div>
         <label>
-            <input type="checkbox" value="festivals" ng-model="checkbox.festivals"> Festivals
+            <input type="checkbox" value="festivals" ng-model="pref.festivals_parades"> Festivals
         </label>
         <label>
-            <input type="checkbox" value="music" ng-model="checkbox.music"> Music
+            <input type="checkbox" value="music" ng-model="pref.music"> Music
         </label>
         <label>
-            <input type="checkbox" value="movies" ng-model="checkbox.movies"> Movies
+            <input type="checkbox" value="movies" ng-model="pref.movies_film"> Movies
         </label>
     </div>
-    <button ng-click="register(user)">Submit</button>
-<button ng-click="cancel(user)">Cancel</button>
+    <button ng-click="register(user,pref)">Submit</button>
+    <button ng-click="cancel(user)">Cancel</button>
 
     </div>
     

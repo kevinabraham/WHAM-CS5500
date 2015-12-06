@@ -194,35 +194,58 @@ $scope.showPosition = function (position) {
    var eventsList = "";
    $scope.myMarkers = [];
 
-   if($scope.option.festival){
-    console.log("Get festivals");
-    if(eventsList == ""){
-      eventsList = eventsList + "festivals_parades";
-    }else{
-      eventsList = eventsList +", "+ "festivals_parades";
-    }
-  }
-  if($scope.option.music){
-    if(eventsList == ""){
-      eventsList = eventsList + "music";
-    }else{
-      eventsList = eventsList +", "+ "music";
-    }
-  }
-  if($scope.option.movies){
-    console.log("Get movies");
-    if(eventsList == ""){
-      eventsList = eventsList + "movies_film";
-    }else{
-      eventsList = eventsList +", "+ "movies_film";
-    }
-  }
+   if($rootScope.currentUser !=  null){
+    // Retrieving Logged In user preferences
+    console.log($rootScope.currentUser);
 
-  console.log(eventsList);
-
-  getEventsEventFull(eventsList);    
-      // getGooglePlacesEvents();
+    var preferences = $rootScope.currentUser.preferences;
+    var types = preferences.types;
+    for(var i = 0; i<types.length;i++){
+      if(eventsList == ""){
+        eventsList = types[i];
+      }else eventsList = eventsList + ", "+types[i];
     }
+    console.log("Logging user preferences");
+
+  }else{
+
+     // Retrieving Guest user preferences
+
+    if($scope.option.festival){
+      console.log("Get festivals");
+
+      if(eventsList == ""){
+        eventsList = eventsList + "festivals_parades";
+      }else{
+        eventsList = eventsList +", "+ "festivals_parades";
+      }
+    }
+
+    if($scope.option.music){
+      if(eventsList == ""){
+        eventsList = eventsList + "music";
+      }else{
+        eventsList = eventsList +", "+ "music";
+      }
+    }
+
+    if($scope.option.movies){
+      console.log("Get movies");
+      if(eventsList == ""){
+        eventsList = eventsList + "movies_film";
+      }else{
+        eventsList = eventsList +", "+ "movies_film";
+      }
+    }
+
+  console.log("Logging guest user preferences");
+}
+
+console.log(eventsList);
+getEventsEventFull(eventsList);    
+// getGooglePlacesEvents();
+
+}
 
 
 
