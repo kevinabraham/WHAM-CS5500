@@ -7,56 +7,56 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
-    <script src="js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+	<script src="js/ui-bootstrap-tpls-0.14.3.min.js"></script>
 
 	<link rel="shortcut icon" href="images/website-icon.ico">
 
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>WHAM</title>
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<title>WHAM</title>
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
 
 
 
-    <script type="text/javascript" src="http://api.eventful.com/js/api"></script>
-    <script type="text/javascript" src="js/login.js"></script>
+	<script type="text/javascript" src="http://api.eventful.com/js/api"></script>
+	<script type="text/javascript" src="js/login.js"></script>
 	<script type="text/javascript" src="js/register.controller.js"></script>
-    <script type="text/javascript" src="js/user.service.js"></script>
+	<script type="text/javascript" src="js/user.service.js"></script>
 
-   
 
-    <style>
-    	html, body {
-    		height: 100%;
-    		margin: 0;
-    		padding: 0;
-    	}
-    	#map {
-    		height: 60%;
-    		/*border: 1px solid;*/
-    	}
-    	.navbar {
-    		position: relative;
-    		min-height: 50px;
-    		margin-bottom: 0px;
-    		border: 1px solid transparent;
-    	}
-    	.tpad20 {
-    		padding-top: 20px;
-    	}
 
-    	.app-modal-window .modal-dialog .modal-body .windowClass{
-  width : 350px;
-    min-width: 350px;
-}
-    </style>
+	<style>
+	html, body {
+		height: 100%;
+		margin: 0;
+		padding: 0;
+	}
+	#map {
+		height: 60%;
+		/*border: 1px solid;*/
+	}
+	.navbar {
+		position: relative;
+		min-height: 50px;
+		margin-bottom: 0px;
+		border: 1px solid transparent;
+	}
+	.tpad20 {
+		padding-top: 20px;
+	}
+
+	.app-modal-window .modal-dialog .modal-body .windowClass{
+		width : 350px;
+		min-width: 350px;
+	}
+	</style>
 </head>
 
 <body ng-app="PlacesApp">
@@ -65,26 +65,15 @@
 	<div ng-controller="myNoteCtrl">
 
 		{{error}}
-
-
+		<!--TOp navbar -->
 		<nav class="navbar navbar-inverse navbar-static-top">
 			<div class="container">
 				
 				<div class="navbar-header">
 					<a class="navbar-brand" href="#">
 						WHAM
-						<!-- <img alt="Brand" src="..."> -->
 					</a>
 				</div>
-
-				<!-- <div class="nav navbar-right">
-					
-					
-
-					<button type="submit" class="btn btn-primary navbar-btn">Sign In</button>
-					<button type="submit" class="btn btn-primary navbar-btn">Sign Up</button>
-
-				</div> -->
 
 				<div id="navbar" class="navbar-collapse collapse">
 					<form class="navbar-form navbar-right">
@@ -92,71 +81,43 @@
 						<div class="form-group">
 							<input id="pac-input" class="controls form-control" type="text" placeholder="Enter a location">
 						</div>
-						<button type="submit" class="btn btn-primary" onclick="getLocationOnClick()">Find Me</button>
+						<button type="submit" class="btn btn-primary" ng-click="getLocation()">Find Me</button>
 						<div class="form-group" ng-show="currentUser == null">
-						<button type="submit" class="btn btn-primary" ng-click="signin()">Sign In</button>
-						<button type="submit" class="btn btn-primary" ng-click="signup()">Sign Up</button>
+							<button type="submit" class="btn btn-primary" ng-click="signin()">Sign In</button>
+							<button type="submit" class="btn btn-primary" ng-click="signup()">Sign Up</button>
 						</div>
-<div class="form-group" style="color: #d6d6d6" ng-hide="currentUser == null">
+						<div class="form-group" style="color: #d6d6d6" ng-hide="currentUser == null">
 
-<button type="submit" class="btn btn-primary" ng-click="logout()">Logout</button>
-Welcome {{currentUser.username}}
-</div>
+							<button type="submit" class="btn btn-primary" ng-click="logout()">Logout</button>
+							Welcome {{currentUser.username}}
+						</div>
 
 					</form>
 				</div>
 
 			</div>
 		</nav>
+		<!--Top navbar end -->
 
-		<script>
-			function getLocationOnClick() {
-				console.log("in fnction");
-			}
-		</script>
 
-		<div id="map">
+		<div id="map"></div>
 
-			<div id="legend"></div>
-		</div>
-		
-
-		<style>
-  		#legend {
-    		background: white;
-    		padding: 10px;
-  		}
-		</style>
-
+		<!--The are the preferences and search button -->
 		<div class="container">
 
-			
-			<!-- <div>
-				<input id="pac-input" class="controls" type="text" placeholder="Enter a location">
-			</div> -->
-
-			
-
-			<div class="checkbox row" ng-show = 	"currentUser == null">
+			<div class="checkbox row" ng-show = "currentUser == null">
 
 				<div class="col-md-2">
 					<label>
 						<input id="festivals" type="checkbox" ng-model="option.festival"> Festivals
 					</label>
 				</div>
-			<!-- </div>
-
-
-			<div class="checkbox"> -->
 
 				<div class="col-md-2">
 					<label>
 						<input id="music" type="checkbox" ng-model="option.music"> Music
 					</label>
 				</div>
-			<!-- </div>
-
-			<div class="checkbox"> -->
 
 				<div class="col-md-2">
 					<label>
@@ -167,12 +128,13 @@ Welcome {{currentUser.username}}
 			<br/>
 
 			<div>
-				<button type="button" id="searchButton" class="btn btn-primary btn-lg btn-block" ng-click="getevents()" autocomplete="off">
+				<button type="button" id="searchButton" class="btn btn-primary btn-lg btn-block" ng-click="getevents()">
 					SEARCH
 				</button>
 			</div>  
 
 		</div>
+		<!--The are the preferences and search button -->
 
 		<div class="container tpad20">
 
@@ -207,10 +169,6 @@ Welcome {{currentUser.username}}
 			</div>
 		</div>
 	</div>
-
-
-
-
 
 </body>
 </html>
