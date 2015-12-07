@@ -1,6 +1,3 @@
-/**
- * Created by bhakti on 11/29/15.
- */
 
 app.controller("RegisterController",RegisterController);
 

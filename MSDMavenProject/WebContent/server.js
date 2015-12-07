@@ -31,7 +31,6 @@ var User=mongoose.model("User",UserSchema);
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-// app.use(multer()); // for parsing multipart/form-data
 app.use(session({secret: "this is the secret"}));
 app.use(cookieParser());
 app.use(passport.initialize());
@@ -73,26 +72,12 @@ app.post("/rest/login",passport.authenticate("local"), function (req, res) {
 
     console.log("helloooooooo from server");
     console.log(user);
-    
-    //User.create(user, function (err,result) {
-    //    if(err)
-    //     console.log(err);
-    //    else
-    //    console.log(result);
 
         User.findOne({username:user.username,password:user.password},function(err,foundUser){
-            //console.log(err);
             console.log("USer found");
             console.log(foundUser);
             res.json(foundUser);
-
-
         });
-        
-    //})
-
-
-
 });
 
 app.post("/rest/register",function(req,res){
@@ -110,7 +95,7 @@ app.post("/rest/register",function(req,res){
             }
             else{ res.json(null);}
         });
- });
+});
 
 app.get("/rest/loggedin",function(req,res){
     res.send(req.isAuthenticated() ? req.user : '0');
@@ -125,6 +110,5 @@ app.post("/rest/logout",function(req,res){
 var ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
-//app.listen(port, ip);
 app.use(express.static(path.join(__dirname, '/public')));
 app.listen(port, ip);
