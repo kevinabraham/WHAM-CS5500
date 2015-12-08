@@ -140,10 +140,11 @@ $scope.getLocation = function () {
           $scope.myMap.setCenter(latlng);
           var marker = new google.maps.Marker({
             map: $scope.myMap,
-            position: latlng
+            position: latlng,
+            icon: 'images/blue-icon.png'
           });
 
-          // $scope.getevents();
+          $scope.getevents();
         });
 
         infowindow = new google.maps.InfoWindow();
