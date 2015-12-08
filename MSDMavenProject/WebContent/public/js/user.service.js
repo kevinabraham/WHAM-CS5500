@@ -6,7 +6,8 @@ app.factory("UserService",UserService);
 				createUser: createUser,
 				loginUser: loginUser,
 				loggedIn: loggedIn,
-				logoutUser: logoutUser
+				logoutUser: logoutUser,
+				updatePreference: updatePreference
 		};
 		return service;
 		
@@ -23,21 +24,27 @@ app.factory("UserService",UserService);
 			.success(callback);
 		}
 
-		function loggedIn(){
+		function loggedIn(callback){
 			console.log("Inside loogedin");
 			$http.get("/rest/loggedin")
 			.success(function(user){
 				if(user != '0'){
 				console.log("User found on page refresh");
-				$rootScope.currentUser = user;
+				callback(user);
 			}else{
-				$rootScope.currentUser = null;
+				callback(null);
 			}
 		});
 		}
 
 		function logoutUser(callback){
 			$http.post("/rest/logout")
+			.success(callback);
+		}
+
+		function updatePreference(pref,callback){
+			console.log("Inside Update Preference");
+			$http.post("/rest/updatePref",pref)
 			.success(callback);
 		}
 

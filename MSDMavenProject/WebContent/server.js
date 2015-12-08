@@ -80,6 +80,21 @@ app.post("/rest/login",passport.authenticate("local"), function (req, res) {
         });
 });
 
+app.post("/rest/updatePref", function (req, res) {
+    console.log(">>>>> Update preferences ");
+    var user = req.user;
+    var p = req.body;  
+    User.update({_id: user._id}, {preferences : p},function(err,result){
+        if(err)
+            res.json(null);
+        else{
+            User.findOne({_id:user._id},function(err,foundUser){
+            res.json(foundUser);
+        });
+        }
+    });
+});
+
 app.post("/rest/register",function(req,res){
     console.log("inside register");
      var user=req.body;

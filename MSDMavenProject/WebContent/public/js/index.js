@@ -2,7 +2,14 @@ var app = angular.module("PlacesApp", ['ui.bootstrap']);
 
 app.controller("myNoteCtrl", function($scope,GoogleMapsService,$uibModal,$rootScope,UserService) {
 
-  UserService.loggedIn();
+  UserService.loggedIn(function(user){
+    console.log("checked user loggedin");
+    console.log(user);
+    if(user != null){
+      $rootScope.currentUser = user;
+      loadLoggedInUserPref();
+    }
+  });
   $scope.message = "Hello to the project";
   $scope.option = {};
   $scope.events = null;
@@ -32,6 +39,34 @@ app.controller("myNoteCtrl", function($scope,GoogleMapsService,$uibModal,$rootSc
     {name : "25", value : 25},
     {name : "30", value : 30}
   ]
+
+ function loadLoggedInUserPref(){
+
+    console.log(">>> Inside loadLoggedInUserPref");
+    $scope.option.festivals_parades = false;
+    $scope.option.movies_film = false;
+     $scope.option.music = false;
+    
+    var preferences = $rootScope.currentUser.preferences;
+    console.log(preferences);
+    var types = preferences.types;
+    for(var i = 0; i<types.length;i++){
+      if(types[i] === "festivals_parades"){
+        $scope.option.festivals_parades = true;
+      }
+
+       if(types[i] === "movies_film"){
+        $scope.option.movies_film = true;
+      }
+
+       if(types[i] === "music"){
+        $scope.option.music = true;
+      }
+    }
+    $scope.within = {name: preferences.within.toString(), value: preferences.within};
+    $scope.pageSize = {name : preferences.pageSize.toString(), value: preferences.pageSize};
+  }
+
   
 //autcomplete code 
 var input = document.getElementById('pac-input');
@@ -173,27 +208,9 @@ $scope.getLocation = function () {
 
   // creating a new map again for new  events - end
 
-  if($rootScope.currentUser !=  null){
-    // Retrieving Logged In user preferences
-    var preferences = $rootScope.currentUser.preferences;
-    console.log(preferences);
-    var types = preferences.types;
-    for(var i = 0; i<types.length;i++){
-      if(eventsList == ""){
-        eventsList = types[i];
-      }else eventsList = eventsList + ", "+types[i];
-    }
-
-    console.log("Loading user preferences");
-    $scope.within = {name: preferences.within.toString(), value: preferences.within};
-    $scope.pageSize = {name : preferences.pageSize.toString(), value: preferences.pageSize}
-
-
-  }else{
-
      // Retrieving Guest user preferences
 
-     if($scope.option.festival){
+     if($scope.option.festivals_parades){
       if(eventsList == ""){
         eventsList = eventsList + "festivals_parades";
       }else{
@@ -209,14 +226,13 @@ $scope.getLocation = function () {
       }
     }
 
-    if($scope.option.movies){
+    if($scope.option.movies_film){
       if(eventsList == ""){
         eventsList = eventsList + "movies_film";
       }else{
         eventsList = eventsList +", "+ "movies_film";
       }
     }
-  }
   getEventsEventFull(eventsList);
 
 }
@@ -225,6 +241,7 @@ $scope.getLocation = function () {
 
 function getEventsEventFull(eventsList){
   console.log(">> Inside getEventsEventFull");
+  console.log(eventsList);
 
   var StringLocation = $scope.lat +"," + $scope.lng;
   var oArgs = {
@@ -265,6 +282,8 @@ function getEventsEventFull(eventsList){
 
         modalInstance.result.then(function (currentUser) {
           $rootScope.currentUser = currentUser;
+          loadLoggedInUserPref();
+          $scope.getevents();
         }, function () {
           console.error("Login failed");
         });
@@ -281,6 +300,9 @@ function getEventsEventFull(eventsList){
         });
         modalInstance.result.then(function (currentUser) {
           $rootScope.currentUser = currentUser;
+          loadLoggedInUserPref();
+          $scope.getevents();
+         
         }, function () {
           console.error("Registration failed");
         });
@@ -293,6 +315,31 @@ function getEventsEventFull(eventsList){
           console.log("User logout successfull");
           $rootScope.currentUser = null;
         });
+      }
+
+      $scope.update = function () {
+        console.log("Inside update preferences");
+        if($rootScope.currentUser != null){
+          var types = [];
+          if($scope.option.festivals_parades){
+            types.push("festivals_parades");
+          }
+
+          if($scope.option.music){
+            types.push("music");
+          }
+
+          if($scope.option.movies_film){
+            types.push("movies_film");
+          }
+          var preferences = {types : types, within : $scope.within.value, pageSize : $scope.pageSize.value};
+          UserService.updatePreference(preferences,function(result){
+            $rootScope.currentUser = result;
+          });
+        }else{
+          $scope.error = "Error updating user preferences: User not found";
+        }
+
       }
 
 });

@@ -100,11 +100,11 @@
 		<!--The are the preferences and search button -->
 		<div class="container">
 
-			<div class="checkbox row" ng-show = "currentUser == null">
+			<div class="checkbox row">
 
 				<div class="col-md-1">
 					<label>
-						<input id="festivals" type="checkbox" ng-model="option.festival"> Festivals
+						<input id="festivals" type="checkbox" ng-model="option.festivals_parades"> Festivals
 					</label>
 				</div>
 
@@ -116,14 +116,13 @@
 
 				<div class="col-md-1">
 					<label>
-						<input id="movies_film" type="checkbox" ng-model="option.movies"> Movies
+						<input id="movies_film" type="checkbox" ng-model="option.movies_film"> Movies
 					</label>
 				</div>
 
-				<div class="col-md-3"></div>
 
-				<div class="col-md-3">
-					<div class="col-md-8">
+				<div class="col-md-4">
+					<div class="col-md-6">
 						<label>Events within miles</label>
 					</div>
 					<div class="col-md-4">
@@ -132,14 +131,22 @@
 					</div>
 				</div>
 
-				<div class="col-md-3">
-					<div class="col-md-8">
+				<div class="col-md-4">
+					<div class="col-md-6">
 						<label>Number of items</label>
 					</div>
 					<div class="col-md-4">
 						<select class="form-control input-sm" ng-model="pageSize" ng-options="option.name for option in pageSizeOptions track by option.value" ng-init="pageSize = pageSizeOptions[1]">
 					</select>
 					</div>
+				</div>
+
+				<div class="col-md-1" ng-hide="currentUser == null">
+
+					<button type="button" id="searchButton" class="btn btn-primary btn-md" ng-click="update()">
+					Save
+				</button>
+					
 				</div>
 
 			</div>
