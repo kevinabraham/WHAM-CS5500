@@ -172,17 +172,21 @@ $scope.getLocation = function () {
 
   // creating a new map again for new  events - end
 
-
   if($rootScope.currentUser !=  null){
     // Retrieving Logged In user preferences
     var preferences = $rootScope.currentUser.preferences;
+    console.log(preferences);
     var types = preferences.types;
     for(var i = 0; i<types.length;i++){
       if(eventsList == ""){
         eventsList = types[i];
       }else eventsList = eventsList + ", "+types[i];
     }
+
     console.log("Loading user preferences");
+    $scope.within = {name: preferences.within.toString(), value: preferences.within};
+    $scope.pageSize = {name : preferences.pageSize.toString(), value: preferences.pageSize}
+
 
   }else{
 
@@ -213,6 +217,7 @@ $scope.getLocation = function () {
     }
   }
   getEventsEventFull(eventsList);
+
 }
 
 

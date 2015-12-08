@@ -32,6 +32,20 @@
         <label>
             <input type="checkbox" value="movies" ng-model="pref.movies_film"> Movies
         </label>
+        <div class="col-md-8">
+            <label>Events within miles</label>
+        </div>
+        <div class="col-md-4">
+            <select class="form-control input-sm" ng-model="within" ng-options="option.name for option in withinOptions track by option.value" ng-init="within = withinOptions[0]">
+            </select>
+        </div>
+        <div class="col-md-8">
+            <label>Number of items</label>
+        </div>
+        <div class="col-md-4">
+            <select class="form-control input-sm" ng-model="pageSize" ng-options="option.name for option in pageSizeOptions track by option.value" ng-init="pageSize = pageSizeOptions[1]">
+            </select>
+        </div>
     </div>
     <button ng-click="register(user,pref)">Submit</button>
     <button ng-click="cancel(user)">Cancel</button>

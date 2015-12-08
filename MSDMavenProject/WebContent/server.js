@@ -24,7 +24,7 @@ var UserSchema=new mongoose.Schema({
     username:String,
     password:String,
     email:String,
-    preferences : { types :[String]}
+    preferences : { types :[String], within: Number, pageSize : Number}
 })
 
 var User=mongoose.model("User",UserSchema);
