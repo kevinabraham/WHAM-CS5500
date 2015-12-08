@@ -11,18 +11,20 @@
 </head>
 
 <body>
-<div class="logo"></div>
+      <div class="text-center"><h1>Registration</h1></div>
 <div class="login-block">
     <div>
-    <h1>Registration</h1>
+  
 <div ng-hide="message==null">{{message}}</div>
 
 
     <input ng-model="user.firstname" class="form-control" type="text" value="" placeholder="Firstname" id="username" />
-    <input ng-model="user.lastname" class="form-control" type="password" value="" placeholder="Lastname" id="username" />
-    <input ng-model="user.username" class="form-control" type="text" value="" placeholder="Username" id="username" />
+    <input ng-model="user.lastname" class="form-control" type="text" value="" placeholder="Lastname" id="username" />
+    <input ng-model="user.username"  class="form-control" type="text" value="" placeholder="Username" id="username" />
     <input ng-model="user.password" class="form-control" type="password" value="" placeholder="Password" id="password" />
-    <div>
+
+    <form>
+        <div class="form-group">
         <label>
             <input type="checkbox" value="festivals" ng-model="pref.festivals_parades"> Festivals
         </label>
@@ -32,25 +34,44 @@
         <label>
             <input type="checkbox" value="movies" ng-model="pref.movies_film"> Movies
         </label>
-        <div class="col-md-8">
+    </div>
+      <div class="form-group">
+         <div class="col-md-8">
             <label>Events within miles</label>
         </div>
         <div class="col-md-4">
             <select class="form-control input-sm" ng-model="within" ng-options="option.name for option in withinOptions track by option.value" ng-init="within = withinOptions[0]">
             </select>
         </div>
-        <div class="col-md-8">
+      
+    </div>
+    <div class="form-group">
+         <div class="col-md-8">
             <label>Number of items</label>
         </div>
         <div class="col-md-4">
             <select class="form-control input-sm" ng-model="pageSize" ng-options="option.name for option in pageSizeOptions track by option.value" ng-init="pageSize = pageSizeOptions[1]">
             </select>
         </div>
+        
     </div>
-    <button ng-click="register(user,pref)">Submit</button>
-    <button ng-click="cancel(user)">Cancel</button>
+ <!--    <div class="form-group">
+        <div></div>
+    </div> -->
+
+   </form>
+    <div>    
 
     </div>
+    <br/>
+    <span class="row">
+         <div class="col-xs-1"></div>
+         <button class="btn btn-danger col-xs-4" ng-click="register(user,pref)">Submit</button>
+         <div class="col-xs-2"></div>
+         <button class="btn btn-danger col-xs-4" type="button" ng-click="cancel(user)">Cancel</button>
+    </div>
+
+    <!-- </span> -->
     
 </div>
 </body>

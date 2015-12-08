@@ -10,18 +10,24 @@
 </head>
 
 <body>
-<div class="logo"></div>
+
+<div class="text-center"><h1>Login</h1></div>
 <div class="login-block">
    <div class="alert alert-danger" ng-hide="message==null">
 
         {{message}}
     </div>
     <div>
-    <h1>Login</h1>
+   
     <input ng-model="user.username" class="form-control" type="text" value="" placeholder="Username" id="username" />
     <input ng-model="user.password" class="form-control" type="password" value="" placeholder="Password" id="password" />
-    <button ng-click="login(user)" class="btn btn-primary">Login</button>
-    <button ng-click="cancel()" class="btn btn-primary">Cancel</button>
+    <span class="row">
+    <div class="col-xs-1"></div>
+    <button ng-click="login(user)" class="btn btn-danger col-xs-4">Login</button>
+    <div class="col-xs-2"></div>
+    <button ng-click="cancel()" class="btn btn-danger col-xs-4" type="button">Cancel</button>
+    </span>
+    </div>
     </div>
    
 
