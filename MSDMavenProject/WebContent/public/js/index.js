@@ -14,7 +14,7 @@ app.controller("myNoteCtrl", function($scope,GoogleMapsService,$uibModal,$rootSc
   $scope.error = "";
   $scope.myMap = null;
   $scope.myMarkers = [];
-
+  
 //autcomplete code 
 var input = document.getElementById('pac-input');
 var autocomplete;
@@ -139,6 +139,7 @@ $scope.getLocation = function () {
 
     $scope.getevents = function(){
      console.log(">> Inside getevents()");
+
      var eventsList = "";
      $scope.myMarkers = [];
 
@@ -199,7 +200,7 @@ $scope.getLocation = function () {
 
 
 
-function  getEventsEventFull(eventsList){
+function getEventsEventFull(eventsList){
   console.log(">> Inside getEventsEventFull");
 
   var StringLocation = $scope.lat +"," + $scope.lng;
@@ -227,7 +228,7 @@ function  getEventsEventFull(eventsList){
 
               createMarker(eventInfo);
             }
-
+          $scope.$apply();
           });
       }
 
