@@ -193,7 +193,7 @@ $scope.getLocation = function () {
 
     $scope.getevents = function(){
      console.log(">> Inside getevents()");
-     var eventsList = "";
+     $scope.eventsList = "";
      $scope.myMarkers = [];
 
    // creating a new map again for new  events -start
@@ -211,35 +211,35 @@ $scope.getLocation = function () {
      // Retrieving Guest user preferences
 
      if($scope.option.festivals_parades){
-      if(eventsList == ""){
-        eventsList = eventsList + "festivals_parades";
+      if($scope.eventsList == ""){
+        $scope.eventsList = $scope.eventsList + "festivals_parades";
       }else{
-        eventsList = eventsList +", "+ "festivals_parades";
+        $scope.eventsList = $scope.eventsList +", "+ "festivals_parades";
       }
     }
 
     if($scope.option.music){
-      if(eventsList == ""){
-        eventsList = eventsList + "music";
+      if($scope.eventsList == ""){
+        $scope.eventsList = $scope.eventsList + "music";
       }else{
-        eventsList = eventsList +", "+ "music";
+        $scope.eventsList = $scope.eventsList +", "+ "music";
       }
     }
 
     if($scope.option.movies_film){
-      if(eventsList == ""){
-        eventsList = eventsList + "movies_film";
+      if($scope.eventsList == ""){
+        $scope.eventsList = $scope.eventsList + "movies_film";
       }else{
-        eventsList = eventsList +", "+ "movies_film";
+        $scope.eventsList = $scope.eventsList +", "+ "movies_film";
       }
     }
-  getEventsEventFull(eventsList);
+  $scope.getEventsEventFull($scope.eventsList);
 
 }
 
 
 
-function getEventsEventFull(eventsList){
+$scope.getEventsEventFull = function(eventsList){
   console.log(">> Inside getEventsEventFull");
   console.log(eventsList);
 
@@ -250,11 +250,13 @@ function getEventsEventFull(eventsList){
           location: (StringLocation), 
           within : $scope.within.value,
           units:"mi",
-          category: eventsList,
+          category: $scope.eventsList,
           // "date": "2013061000-2015062000",
           page_size: $scope.pageSize.value,
           sort_order: "popularity",
         };
+
+        $scope.oArgs = oArgs;
 
         EVDB.API.call("/events/search", oArgs, function(oData) {
           console.log("Eventfull data callback");
