@@ -107,24 +107,67 @@
 
 			<div class="checkbox row" ng-show = "currentUser == null">
 
-				<div class="col-md-2">
+				<div class="col-md-1">
 					<label>
 						<input id="festivals" type="checkbox" ng-model="option.festival"> Festivals
 					</label>
 				</div>
 
-				<div class="col-md-2">
+				<div class="col-md-1">
 					<label>
 						<input id="music" type="checkbox" ng-model="option.music"> Music
 					</label>
 				</div>
 
-				<div class="col-md-2">
+				<div class="col-md-1">
 					<label>
 						<input id="movies_film" type="checkbox" ng-model="option.movies"> Movies
 					</label>
 				</div>
+
+				<div class="col-md-3"></div>
+
+				<div class="col-md-3">
+					<div class="col-md-8">
+						<label>Events within miles</label>
+					</div>
+					<div class="col-md-4">
+						<select class="form-control input-sm" ng-model="within" ng-options="option.name for option in withinOptions track by option.value" ng-init="within = withinOptions[0]">
+					</select>
+					</div>
+				</div>
+
+				<div class="col-md-3">
+					<div class="col-md-8">
+						<label>Number of items</label>
+					</div>
+					<div class="col-md-4">
+						<select class="form-control input-sm" ng-model="pageSize" ng-options="option.name for option in pageSizeOptions track by option.value" ng-init="pageSize = pageSizeOptions[1]">
+					</select>
+					</div>
+				</div>
+
 			</div>
+
+			<!-- <div class="row" ng-show = "currentUser == null">
+				
+				<div class="col-md-2">
+					<label>Events within miles</label>
+					<select class="form-control input-sm" ng-model="within" ng-options="option.name for option in withinOptions track by option.value" ng-init="within = withinOptions[0]">
+					</select>
+				
+				</div>
+				
+
+				
+				<div class="col-md-2">
+					<label>Number of items</label>
+					<select class="form-control input-sm" ng-model="pageSize" ng-options="option.name for option in pageSizeOptions track by option.value" ng-init="pageSize = pageSizeOptions[1]">
+					</select>
+				</div>	
+				
+			</div> -->
+
 			<br/>
 
 			<div>

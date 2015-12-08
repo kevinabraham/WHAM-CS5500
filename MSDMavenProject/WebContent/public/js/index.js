@@ -14,6 +14,24 @@ app.controller("myNoteCtrl", function($scope,GoogleMapsService,$uibModal,$rootSc
   $scope.error = "";
   $scope.myMap = null;
   $scope.myMarkers = [];
+  $scope.within = "";
+  $scope.pageSize = "";
+
+  $scope.withinOptions = [
+    {name : "1", value : 1},
+    {name : "5", value : 5},
+    {name : "10", value : 10},
+    {name : "20", value : 20}
+  ]
+
+  $scope.pageSizeOptions = [
+    {name : "5", value : 5},
+    {name : "10", value : 10},
+    {name : "15", value : 15},
+    {name : "20", value : 20},
+    {name : "25", value : 25},
+    {name : "30", value : 30}
+  ]
   
 //autcomplete code 
 var input = document.getElementById('pac-input');
@@ -139,7 +157,6 @@ $scope.getLocation = function () {
 
     $scope.getevents = function(){
      console.log(">> Inside getevents()");
-
      var eventsList = "";
      $scope.myMarkers = [];
 
@@ -208,11 +225,11 @@ function getEventsEventFull(eventsList){
     app_key: "vHx53bbX7CwW3hrs",
           // q: "music",
           location: (StringLocation), 
-          within : 10,
+          within : $scope.within.value,
           units:"mi",
           category: eventsList,
           // "date": "2013061000-2015062000",
-          page_size: 10,
+          page_size: $scope.pageSize.value,
           sort_order: "popularity",
         };
 
