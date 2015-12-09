@@ -7,7 +7,10 @@ app.factory("UserService",UserService);
 				loginUser: loginUser,
 				loggedIn: loggedIn,
 				logoutUser: logoutUser,
-				updatePreference: updatePreference
+				updatePreference: updatePreference,
+				like: like,
+				dislikes: dislikes,
+				getPref: getPref
 		};
 		return service;
 		
@@ -47,6 +50,24 @@ app.factory("UserService",UserService);
 		function updatePreference(pref,callback){
 			console.log("Inside Update Preference");
 			$http.post("/rest/updatePref",pref)
+			.success(callback);
+		}
+
+		function like(likes,callback){
+			console.log("Inside like");
+			$http.post("/rest/like",likes)
+			.success(callback);
+		}
+
+		function dislikes(dislikes,callback){
+			console.log("Inside like");
+			$http.post("/rest/dislike",dislikes)
+			.success(callback);
+		}
+
+		function getPref(callback){
+			console.log("get Pref");
+			$http.get("/rest/pref")
 			.success(callback);
 		}
 

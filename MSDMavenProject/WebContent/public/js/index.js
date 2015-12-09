@@ -67,6 +67,83 @@ app.controller("myNoteCtrl", function($scope,GoogleMapsService,$uibModal,$rootSc
     $scope.pageSize = {name : preferences.pageSize.toString(), value: preferences.pageSize};
   }
 
+
+  //voting system
+
+  // $scope.currUserId = 'aaa';
+  
+  // $scope.ply = {};
+  // $scope.ply.userVotes = {
+  //   aaa:1
+  // };
+  // $scope.ply.votes = 1;
+  // $scope.like = 0;
+  // $scope.dislikes = null;
+  
+   $scope.doVote = function(e){
+    console.log("Event Id");
+    console.log(e)
+    console.log($rootScope.currentUser.username);
+
+    var like = e.like;
+    if(like == 1){
+      like = 0;
+    }else{
+      like = 1;
+    }
+
+    console.log(like);
+    e.like = like;
+
+    var likes = {username: $rootScope.currentUser.username, 
+      eventId: e.id, like: like, dislike : e.dislike}
+
+      console.log(likes);
+
+      UserService.like(likes,function(result){
+        console.log("Liked item");
+        console.log(result);
+
+      });
+    
+  }
+
+  $scope.doNotVote = function(e){
+    console.log("Event Id");
+    console.log(e)
+    console.log($rootScope.currentUser.username);
+
+    var dislike = e.dislike;
+    if(dislike == 1){
+      dislike = 0;
+    }else{
+      dislike = 1;
+    }
+
+    console.log(dislike);
+    e.dislike = dislike;
+
+    var dislikes = {username: $rootScope.currentUser.username, 
+      eventId: e.id, like: e.like, dislike : dislike}
+
+    console.log(dislikes);
+
+    UserService.dislikes(dislikes,function(result){
+      console.log("Liked item");
+      console.log(result);
+
+    });
+    
+  }
+
+  $scope.deleteItem = function(){
+    if ($scope.selectedItem >= 0) {
+      $scope.data.splice($scope.selectedItem,1);
+    }
+  }
+
+  //voting systemm end
+
   
 //autcomplete code 
 var input = document.getElementById('pac-input');
@@ -237,6 +314,52 @@ $scope.getLocation = function () {
 
 }
 
+$scope.setLikeDislike = function(events){
+        console.log("setting like dislike for events");
+        var eventsList = [];
+        UserService.getPref(function(data){
+
+          console.log(data);
+          for(var i=0;i<events.length;i++){
+            var push = true;
+            $scope.events[i]['like'] = 0;
+            $scope.events[i]['dislike'] = 0;
+            for(var j=0;j<data.length;j++){
+              if(data[j].eventId == events[i].id){
+                $scope.events[i]['like'] = data[j].like;
+                $scope.events[i]['dislike'] = data[j].dislike;
+                console.log(data[j]);
+                if(data[j].dislike == 1){
+                 push = false;
+                } 
+              }
+
+            }
+            if(push)
+             eventsList.push($scope.events[i]);       
+          }
+
+          $scope.events = eventsList;
+          console.log($scope.events);
+
+          for(var i=0;i<$scope.events.length;i++){
+            var e = $scope.events[i];
+
+            var eventlatlng = {lat : Number($scope.events[i].latitude), lng: Number($scope.events[i].longitude)};
+            var eventInfo = {title : e.title, location: eventlatlng, venue_address : e.venue_address, 
+              city_name : e.city_name, postal_code: e.postal_code, start_time: e.start_time, url:e.url};
+
+              createMarker(eventInfo);
+            }
+            $scope.$applyAsync();
+
+        });
+
+        
+
+
+      }
+
 
 
 $scope.getEventsEventFull = function(eventsList){
@@ -261,18 +384,25 @@ $scope.getEventsEventFull = function(eventsList){
         EVDB.API.call("/events/search", oArgs, function(oData) {
           console.log("Eventfull data callback");
           $scope.events = oData.events.event;
-          for(var i=0;i<$scope.events.length;i++){
-            var e = $scope.events[i];
+          $scope.setLikeDislike($scope.events);
 
-            var eventlatlng = {lat : Number($scope.events[i].latitude), lng: Number($scope.events[i].longitude)};
-            var eventInfo = {title : e.title, location: eventlatlng, venue_address : e.venue_address, 
-              city_name : e.city_name, postal_code: e.postal_code, start_time: e.start_time, url:e.url};
+          //  console.log($scope.events);
 
-              createMarker(eventInfo);
-            }
-          $scope.$apply();
+          // for(var i=0;i<$scope.events.length;i++){
+          //   var e = $scope.events[i];
+
+          //   var eventlatlng = {lat : Number($scope.events[i].latitude), lng: Number($scope.events[i].longitude)};
+          //   var eventInfo = {title : e.title, location: eventlatlng, venue_address : e.venue_address, 
+          //     city_name : e.city_name, postal_code: e.postal_code, start_time: e.start_time, url:e.url};
+
+          //     createMarker(eventInfo);
+          //   }
+          //   $scope.$apply();
+          
           });
       }
+
+      
 
       $scope.signin = function(){
         var modalInstance = $uibModal.open({
