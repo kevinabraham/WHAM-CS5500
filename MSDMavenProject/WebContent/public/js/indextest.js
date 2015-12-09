@@ -3,8 +3,8 @@ var app = angular.module("PlacesApp", ['ui.bootstrap']);
 app.controller("myNoteCtrl", function($scope,GoogleMapsService,$uibModal,$rootScope,UserService) {
 
   UserService.loggedIn(function(user){
-    console.log("checked user loggedin");
-    console.log(user);
+    // console.log("checked user loggedin");
+    // console.log(user);
     if(user != null){
       $rootScope.currentUser = user;
       loadLoggedInUserPref();
@@ -42,13 +42,13 @@ app.controller("myNoteCtrl", function($scope,GoogleMapsService,$uibModal,$rootSc
 
  function loadLoggedInUserPref(){
 
-    console.log(">>> Inside loadLoggedInUserPref");
+    // console.log(">>> Inside loadLoggedInUserPref");
     $scope.option.festivals_parades = false;
     $scope.option.movies_film = false;
      $scope.option.music = false;
     
     var preferences = $rootScope.currentUser.preferences;
-    console.log(preferences);
+    // console.log(preferences);
     var types = preferences.types;
     for(var i = 0; i<types.length;i++){
       if(types[i] === "festivals_parades"){
@@ -67,83 +67,6 @@ app.controller("myNoteCtrl", function($scope,GoogleMapsService,$uibModal,$rootSc
     $scope.pageSize = {name : preferences.pageSize.toString(), value: preferences.pageSize};
   }
 
-
-  //voting system
-
-  // $scope.currUserId = 'aaa';
-  
-  // $scope.ply = {};
-  // $scope.ply.userVotes = {
-  //   aaa:1
-  // };
-  // $scope.ply.votes = 1;
-  // $scope.like = 0;
-  // $scope.dislikes = null;
-  
-   $scope.doVote = function(e){
-    console.log("Event Id");
-    console.log(e)
-    console.log($rootScope.currentUser.username);
-
-    var like = e.like;
-    if(like == 1){
-      like = 0;
-    }else{
-      like = 1;
-    }
-
-    console.log(like);
-    e.like = like;
-
-    var likes = {username: $rootScope.currentUser.username, 
-      eventId: e.id, like: like, dislike : e.dislike}
-
-      console.log(likes);
-
-      UserService.like(likes,function(result){
-        console.log("Liked item");
-        console.log(result);
-
-      });
-    
-  }
-
-  $scope.doNotVote = function(e){
-    console.log("Event Id");
-    console.log(e)
-    console.log($rootScope.currentUser.username);
-
-    var dislike = e.dislike;
-    if(dislike == 1){
-      dislike = 0;
-    }else{
-      dislike = 1;
-    }
-
-    console.log(dislike);
-    e.dislike = dislike;
-
-    var dislikes = {username: $rootScope.currentUser.username, 
-      eventId: e.id, like: e.like, dislike : dislike}
-
-    console.log(dislikes);
-
-    UserService.dislikes(dislikes,function(result){
-      console.log("Liked item");
-      console.log(result);
-
-    });
-    
-  }
-
-  $scope.deleteItem = function(){
-    if ($scope.selectedItem >= 0) {
-      $scope.data.splice($scope.selectedItem,1);
-    }
-  }
-
-  //voting systemm end
-
   
 //autcomplete code 
 var input = document.getElementById('pac-input');
@@ -152,7 +75,7 @@ var autocomplete;
 var infowindow;
 
 $scope.showPosition = function (position) {
-  console.log("Inside show position");
+  // console.log("Inside show position");
   $scope.lat = position.coords.latitude;
   $scope.lng = position.coords.longitude;
 
@@ -184,7 +107,7 @@ function createMarker(eventInfo) {
   +'</div>';
 
   google.maps.event.addListener(marker, 'click', function() {
-    console.log("inside infowindow");
+    // console.log("inside infowindow");
     infowindow.setContent('<p>' + marker.title + '</p>' + marker.content);
     infowindow.open($scope.myMap, marker);
   });
@@ -212,7 +135,7 @@ $scope.showError = function (error) {
 }
 
 $scope.getLocation = function () {
-  console.log(">> Inside get location");
+  // console.log(">> Inside get location");
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition($scope.showPosition, $scope.showError);
   }
@@ -223,7 +146,7 @@ $scope.getLocation = function () {
 
   // Trying to run through service start
 
-  console.log("Trying initializing maps through the service");
+  // console.log("Trying initializing maps through the service");
   var map;
   GoogleMapsService.mapsInitialized.
   then(function(){
@@ -269,19 +192,19 @@ $scope.getLocation = function () {
 
 
     $scope.getevents = function(){
-     console.log(">> Inside getevents()");
+     // console.log(">> Inside getevents()");
      $scope.eventsList = "";
      $scope.myMarkers = [];
 
    // creating a new map again for new  events -start
-   $scope.myMap = new google.maps.Map(document.getElementById('map'), { zoom: 12 });
-   var latlng = new google.maps.LatLng($scope.lat,$scope.lng);
-   $scope.myMap.setCenter(latlng);
-   var marker = new google.maps.Marker({
-    map: $scope.myMap,
-    position: latlng,
-    icon: 'images/blue-icon.png'
-  });
+  //  $scope.myMap = new google.maps.Map(document.getElementById('map'), { zoom: 12 });
+  //  var latlng = new google.maps.LatLng($scope.lat,$scope.lng);
+  //  $scope.myMap.setCenter(latlng);
+  //  var marker = new google.maps.Marker({
+  //   map: $scope.myMap,
+  //   position: latlng,
+  //   icon: 'images/blue-icon.png'
+  // });
 
   // creating a new map again for new  events - end
 
@@ -314,34 +237,30 @@ $scope.getLocation = function () {
 
 }
 
-$scope.setLikeDislike = function(events){
-        console.log("setting like dislike for events");
-        var eventsList = [];
-        UserService.getPref(function(data){
 
-          console.log(data);
-          for(var i=0;i<events.length;i++){
-            var push = true;
-            $scope.events[i]['like'] = 0;
-            $scope.events[i]['dislike'] = 0;
-            for(var j=0;j<data.length;j++){
-              if(data[j].eventId == events[i].id){
-                $scope.events[i]['like'] = data[j].like;
-                $scope.events[i]['dislike'] = data[j].dislike;
-                console.log(data[j]);
-                if(data[j].dislike == 1){
-                 push = false;
-                } 
-              }
 
-            }
-            if(push)
-             eventsList.push($scope.events[i]);       
-          }
+$scope.getEventsEventFull = function(eventsList){
+  // console.log(">> Inside getEventsEventFull");
+  // console.log(eventsList);
 
-          $scope.events = eventsList;
-          console.log($scope.events);
+  var StringLocation = $scope.lat +"," + $scope.lng;
+  var oArgs = {
+    app_key: "vHx53bbX7CwW3hrs",
+          // q: "music",
+          location: (StringLocation), 
+          within : $scope.within.value,
+          units:"mi",
+          category: eventsList,
+          // "date": "2013061000-2015062000",
+          page_size: $scope.pageSize.value,
+          sort_order: "popularity",
+        };
 
+        $scope.oArgs = oArgs;
+
+        EVDB.API.call("/events/search", oArgs, function(oData) {
+          // console.log("Eventfull data callback");
+          $scope.events = oData.events.event;
           for(var i=0;i<$scope.events.length;i++){
             var e = $scope.events[i];
 
@@ -351,75 +270,9 @@ $scope.setLikeDislike = function(events){
 
               createMarker(eventInfo);
             }
-            $scope.$applyAsync();
-
-        });
-
-        
-
-
-      }
-
-
-
-$scope.getEventsEventFull = function(eventsList){
-  console.log(">> Inside getEventsEventFull");
-  console.log(eventsList);
-
-  var StringLocation = $scope.lat +"," + $scope.lng;
-  var oArgs = {
-    app_key: "vHx53bbX7CwW3hrs",
-          // q: "music",
-          location: (StringLocation), 
-          within : $scope.within.value,
-          units:"mi",
-          category: $scope.eventsList,
-          // "date": "2013061000-2015062000",
-          page_size: $scope.pageSize.value,
-          sort_order: "popularity",
-        };
-
-        $scope.oArgs = oArgs;
-
-        EVDB.API.call("/events/search", oArgs, function(oData) {
-          console.log("Eventfull data callback");
-          $scope.events = oData.events.event;
-          console.log("----------------------");
-          console.log($rootScope.currentUser);
-          if($rootScope.currentUser!= undefined){
-            $scope.setLikeDislike($scope.events);
-          }else{
-            console.log("NO USERSSSSSSSS"); 
-             for(var i=0;i<$scope.events.length;i++){
-            var e = $scope.events[i];
-
-            var eventlatlng = {lat : Number($scope.events[i].latitude), lng: Number($scope.events[i].longitude)};
-            var eventInfo = {title : e.title, location: eventlatlng, venue_address : e.venue_address, 
-              city_name : e.city_name, postal_code: e.postal_code, start_time: e.start_time, url:e.url};
-
-              createMarker(eventInfo);
-            }
-            $scope.$apply();
-          }
-          // $scope.setLikeDislike($scope.events);
-          
-          //  console.log($scope.events);
-
-          // for(var i=0;i<$scope.events.length;i++){
-          //   var e = $scope.events[i];
-
-          //   var eventlatlng = {lat : Number($scope.events[i].latitude), lng: Number($scope.events[i].longitude)};
-          //   var eventInfo = {title : e.title, location: eventlatlng, venue_address : e.venue_address, 
-          //     city_name : e.city_name, postal_code: e.postal_code, start_time: e.start_time, url:e.url};
-
-          //     createMarker(eventInfo);
-          //   }
-          //   $scope.$apply();
-          
+          $scope.$apply();
           });
       }
-
-      
 
       $scope.signin = function(){
         var modalInstance = $uibModal.open({
@@ -461,13 +314,13 @@ $scope.getEventsEventFull = function(eventsList){
       $scope.logout = function(){
 
         UserService.logoutUser(function(response){
-          console.log("User logout successfull");
+          // console.log("User logout successfull");
           $rootScope.currentUser = null;
         });
       }
 
       $scope.update = function () {
-        console.log("Inside update preferences");
+        // console.log("Inside update preferences");
         if($rootScope.currentUser != null){
           var types = [];
           if($scope.option.festivals_parades){

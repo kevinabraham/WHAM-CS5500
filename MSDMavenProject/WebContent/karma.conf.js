@@ -19,10 +19,11 @@ module.exports = function(config) {
     'public/js/angular-mocks.js',
     'public/js/ui-bootstrap-tpls-0.14.3.min.js',
     'public/js/eventfulapi.js',
-    'public/js/index.js',
+    'public/js/indextest.js',
     'public/js/user.service.js',
     'public/js/login.js',
     'public/js/register.controller.js',
+    'public/js/jasmine.async.js',
     'test/*.test.js'
     ],
 
