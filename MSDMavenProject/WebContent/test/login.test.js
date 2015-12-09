@@ -34,9 +34,9 @@ describe("Login", function(){
 		// });
 	it("The input parameters to the login function should not be empty", function(){
 
-		var user = "kp2301";
-		$scope.login(user);
-		expect($scope.login).not.toBe("");
+		$scope.user = {username : "kevin", password : "kevin"};
+		$scope.login($scope.user);
+		// expect($scope.login).not.toBe("");
 	});
 
 	it("The cancel method should get called", function(){

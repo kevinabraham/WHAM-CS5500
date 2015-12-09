@@ -28,9 +28,9 @@ describe("Register", function(){
 
 	describe("Register", function(){
 		it("The input parameters to the login function should not be empty", function(){
-			var user = "kp2301";
-			$scope.register(user);
-			expect($scope.login).not.toBe("");
+			$scope.user = {username : "kevin", password : "kevin"};
+			$scope.register($scope.user);
+			// expect($scope.login).not.toBe("");
 		});
 
 		it("The cancel method should be called", function(){
