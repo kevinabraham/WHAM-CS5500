@@ -24,6 +24,8 @@ app.controller("RegisterController",RegisterController);
         {name : "30", value : 30}
         ]
 
+         $scope.message = null;
+
 
 
         $scope.cancel = function(){
@@ -35,7 +37,9 @@ app.controller("RegisterController",RegisterController);
             console.log(user);
              console.log(pref);
 
-             //add user preferences 
+             if(validation()){
+
+                //add user preferences 
              var types = [];
 
              for(key in pref){
@@ -57,12 +61,37 @@ app.controller("RegisterController",RegisterController);
                     $uibModalInstance.close(response);
                 }
                 else {
-                    $scope.message = "user already exists";
+                    $scope.message = {name : "User already exists.", type: "alert alert-danger alert-dismissible" };
 
                 }
 
             });
+             }
+
+             
 
 
         }
+
+        function validation(user){
+        var validated = true;
+        var user = $scope.user;
+        if(user.username.length>15){
+            $scope.message = {name: "Username is too big", type:"alert alert-warning alert-dismissible"};
+            validated = false;
+        }
+        if(user.username.length < 5){
+            $scope.message = {name: "Username is too small", type:"alert alert-warning alert-dismissible"};
+            validated = false;
+        }
+        if(user.password.length>15){
+            $scope.message = {name: "Password is too big", type:"alert alert-warning alert-dismissible"};
+             validated = false;
+        }
+        if(user.password.length < 5){
+            $scope.message = {name: "Password is too small", type:"alert alert-warning alert-dismissible"};
+             validated = false;
+        }
+        return validated;
+    }
     }

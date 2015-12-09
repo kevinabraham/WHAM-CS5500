@@ -66,7 +66,7 @@ app.get("/orgs", function (req, res) {
     
     });
 
-app.post("/rest/login",passport.authenticate("local"), function (req, res) {
+app.post("/rest/login", function (req, res) {
 
     var user = req.body;
 

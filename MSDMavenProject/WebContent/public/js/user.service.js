@@ -33,8 +33,10 @@ app.factory("UserService",UserService);
 				callback(user);
 			}else{
 				callback(null);
-			}
-		});
+			}})
+			.error(function(err){
+				console.log(err);
+				callback(null)});
 		}
 
 		function logoutUser(callback){
